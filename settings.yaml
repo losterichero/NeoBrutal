@@ -93,4 +93,26 @@ spec:
               name: link
               label: 链接
               placeholder: 请输入跳转链接
-    
+    - group: layout
+      label: 布局
+      formSchema:
+        - $formkit: radio
+          name: post_columns
+          label: 文章卡片布局
+          value: "full"
+          help: "全占满：PC/平板每行一张大卡片，封面图在左、文字在右；每行两个：PC/平板每行两张卡片，封面图在上、文字在下。移动端始终单列、上下结构。"
+          options:
+            - value: "full"
+              label: 全占满
+            - value: "two"
+              label: 每行两个
+        - $formkit: radio
+          name: cover_enabled
+          label: 封面图片
+          value: true
+          help: "开启后，文章列表卡片渲染封面图（需文章已设置封面图）。"
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭

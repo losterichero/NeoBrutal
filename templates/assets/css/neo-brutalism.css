@@ -559,6 +559,38 @@ a {
     border-radius: 0;
 }
 
+/* 社交账号链接小方盒：内容垂直居中，消除内联图片/首字母导致的顶部空白 */
+.media-accounts .account {
+    line-height: 1;
+}
+
+.media-accounts .account a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+}
+
+.media-accounts .account img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: none;
+    line-height: 0;
+}
+
+.media-accounts .account div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+}
+
 .site-status li {
     background: var(--neo-yellow);
     border: 2px solid var(--neo-ink);
@@ -1472,5 +1504,121 @@ a {
     .scrollToTopBtn {
         animation: none !important;
         transition: none !important;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   22. 封面图 & 文章卡片布局
+   布局配置（主题设置 → 布局）：
+   - 全占满（默认）：PC/平板每行一张大卡片，封面图在左、文字在右（左右结构）
+   - 每行两个：      PC/平板网格两列，封面图在上、文字在下（上下结构）
+   - 移动端：        无论哪种布局，始终单列、上下结构
+   封面图元素为 .post_thumb（含图 .post_text 为文字区），
+   仅当「封面图片」开启且文章设置了封面图时，卡片才带 .has-cover。
+   ------------------------------------------------------------------------- */
+
+/* 封面 + 文字 的弹性骨架（仅 .has-cover 卡片生效） */
+.post_loop .post_list.has-cover {
+    display: flex;
+    flex-direction: row;          /* 默认全占满：左右结构 */
+    gap: 28px;
+    align-items: flex-start;
+}
+
+.post_loop .post_list.has-cover .post_thumb {
+    position: relative;
+    flex: 0 0 40%;
+    max-width: 340px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 3px solid var(--neo-ink);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    background: var(--neo-paper-2);
+}
+
+.post_loop .post_list.has-cover .post_thumb a {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+.post_loop .post_list.has-cover .post_thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.2s ease;
+}
+
+.post_loop .post_list.has-cover .post_thumb a:hover img {
+    transform: scale(1.04);
+}
+
+.post_loop .post_list.has-cover .post_text {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 有封面时隐藏大字母水印，避免叠在图上 */
+.post_loop .post_list.has-cover .post_beici {
+    display: none;
+}
+
+/* 每行两个（PC/平板）：网格两列 + 上下结构 */
+.post-loop .post_loop.two-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    align-items: stretch;
+    margin-bottom: 28px;
+}
+
+.post-loop .post_loop.two-col .post_list {
+    margin-bottom: 0;
+    padding: 24px 24px;
+}
+
+.post-loop .post_loop.two-col .post_list h2 {
+    font-size: 24px;
+}
+
+.post-loop .post_loop.two-col .post_list p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.post-loop .post_loop.two-col .post_list.has-cover {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.post-loop .post_loop.two-col .post_list.has-cover .post_thumb {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 16 / 9;
+}
+
+/* 移动端：始终单列、上下结构 */
+@media (max-width: 768px) {
+    .post-loop .post_loop.two-col {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .post_loop .post_list.has-cover {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .post_loop .post_list.has-cover .post_thumb {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 16 / 9;
     }
 }

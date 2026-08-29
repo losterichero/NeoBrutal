@@ -11,7 +11,7 @@
           <div class="post-box-txt">
             <h3 class="latest_post" th:text="'标签：' +${tag.spec?.displayName}"></h3>
           </div>
-          <div class="post_loop">
+          <div class="post_loop" th:classappend="${theme.config?.layout?.post_columns == 'two' ? 'two-col' : ''}">
             <th:block th:insert="~{fragments/posts :: post(${posts})}"></th:block>
           </div>
           <th:block th:if="${theme.config?.styles?.need_ajax_scroll}">

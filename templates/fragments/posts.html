@@ -43,32 +43,43 @@
 
 <th:block th:fragment="post(posts)">
   <th:block th:each="post : ${posts}">
-  <div class="post_list">
+  <div class="post_list"
+       th:with="showCover=${theme.config?.layout?.cover_enabled != false and not #strings.isEmpty(post.spec?.cover)}"
+       th:classappend="${showCover ? 'has-cover' : ''}">
     <div class="post_beici" th:data-text="${post.spec.title}"></div>
-    <h2 class="hover-target">
-      <a 
-        th:href="@{${post.status?.permalink}}"
-        th:title="${post.spec.title}"
-        th:text="${post.spec.title}"
-        >
+    <th:block th:if="${showCover}">
+    <div class="post_thumb">
+      <a th:href="@{${post.status?.permalink}}" th:title="${post.spec.title}">
+        <img th:src="@{${post.spec.cover}}" th:alt="${post.spec.title}" loading="lazy" />
       </a>
-    </h2>
-    <p style="position:relative" th:text="${post.status?.excerpt}"></p>
-    <div class="post_loop_info">
-      <th:block th:each="contributor : ${post?.contributors}">
-      <span>
-        <i class="bi bi-person-fill"></i>
-        <th:block th:text="${contributor?.displayName}"></th:block>
-      </span>
-      </th:block>
-      <span th:each="category : ${post.categories}">
-        <i class="bi bi-folder-fill"></i>
-        <th:block th:text="${category.spec.displayName}"></th:block>
-      </span>
-      <span>
-        <i class="bi bi-stopwatch"></i>
-        <th:block th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}"></th:block>
-      </span>
+    </div>
+    </th:block>
+    <div class="post_text">
+      <h2 class="hover-target">
+        <a
+          th:href="@{${post.status?.permalink}}"
+          th:title="${post.spec.title}"
+          th:text="${post.spec.title}"
+          >
+        </a>
+      </h2>
+      <p style="position:relative" th:text="${post.status?.excerpt}"></p>
+      <div class="post_loop_info">
+        <th:block th:each="contributor : ${post?.contributors}">
+        <span>
+          <i class="bi bi-person-fill"></i>
+          <th:block th:text="${contributor?.displayName}"></th:block>
+        </span>
+        </th:block>
+        <span th:each="category : ${post.categories}">
+          <i class="bi bi-folder-fill"></i>
+          <th:block th:text="${category.spec.displayName}"></th:block>
+        </span>
+        <span>
+          <i class="bi bi-stopwatch"></i>
+          <th:block th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}"></th:block>
+        </span>
+      </div>
     </div>
   </div>
   </th:block>
