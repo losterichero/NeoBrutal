@@ -1,0 +1,96 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: theme-brevity-book-setting
+spec:
+  forms:
+    - group: base_info
+      label: 基本信息
+      formSchema:
+        - $formkit: text
+          name: display_user
+          label: 首页显示用户
+          placeholder: "请输入用户账号"
+        - $formkit: datetime-local
+          name: site_running_time
+          label: 建站日期
+        - $formkit: text
+          name: icp_number
+          label: 备案号
+          placeholder: "请输入站点备案号"
+        - $formkit: text
+          name: one_word
+          label: 底部一句话
+          placeholder: "在这里填入一句话显示在底部"
+        - $formkit: repeater
+          name: media_accounts
+          label: 媒体账号
+          value: []
+          max: 5
+          min: 0
+          children:
+            - $formkit: text
+              name: name
+              label: 名称
+              value: ""
+            - $formkit: text
+              name: url
+              label: 地址
+              value: ""
+            - $formkit: attachment
+              name: logo
+              label: logo
+              value: ""
+    - group: styles
+      label: 样式
+      formSchema:
+        - $formkit: select
+          name: color_schema
+          label: 配色方案
+          value: "classic"
+          help: "新粗野主义三套配色：经典粗野（红白档案）/ 未来粗野（青紫）/ 暖阳粗野（橙黄）"
+          options:
+            - label: "经典粗野（红白）"
+              value: "classic"
+            - label: "未来粗野（青紫）"
+              value: "future"
+            - label: "暖阳粗野（橙黄）"
+              value: "warm"
+        - $formkit: select
+          name: logo_title
+          label: logo,标题显示状态
+          value: "0"
+          options:
+            - label: "仅显示标题"
+              value: "0"
+            - label: "仅显示logo"
+              value: "1"
+            - label: "logo,标题同时显示"
+              value: "2"
+        - $formkit: radio
+          name: need_ajax_scroll
+          label: Ajax-scroll自动加载
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: repeater
+          name: banners
+          label: 轮播图设置
+          value: [ ]
+          children:
+            - $formkit: text
+              name: title
+              label: 标题
+              placeholder: 请输入标题
+            - $formkit: text
+              name: subtitle
+              label: 副标题
+              placeholder: 请输入副标题
+            - $formkit: text
+              name: link
+              label: 链接
+              placeholder: 请输入跳转链接
+    

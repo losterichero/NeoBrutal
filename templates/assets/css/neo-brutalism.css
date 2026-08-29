@@ -1,0 +1,1476 @@
+/* ==========================================================================
+   Neo-Brutalism skin — brevityBook
+   在 style.css 之后引入，仅重绘视觉样式，不改动布局与结构。
+   核心：粗黑边框 · 硬阴影 · 高饱和纯色 · 方正棱角 · 触觉按压反馈
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   1. 设计变量
+   ------------------------------------------------------------------------- */
+:root {
+    /* 配色方案一：经典粗野（红白档案）—— 纯红白黑三色系统（默认） */
+    --neo-bg: #F0EDE8;              /* 背景：水泥灰白 */
+    --neo-card-bg: #FFFFFF;         /* 卡片：纯白 */
+    --neo-ink: #0A0A0A;             /* 边框 / 文字 / 阴影：纯黑 */
+    --neo-paper-2: #E7E3DD;         /* 次级纸张色 */
+    --neo-accent: #D32F2F;          /* 主色：信号红 */
+
+    /* 三层红（红白档案） */
+    --neo-primary: #D32F2F;         /* 主红 */
+    --neo-primary-dark: #B71C1C;    /* 深红 */
+    --neo-primary-light: #E53935;   /* 亮红 */
+    --neo-text-light: #555555;      /* 次级文字 */
+
+    /* 兼容旧变量 —— 无辅色，统一映射到主红 */
+    --neo-yellow: #D32F2F;
+    --neo-cyan: #D32F2F;
+    --neo-purple: #D32F2F;
+
+    /* 边框与硬阴影 */
+    --neo-border: 3px solid var(--neo-ink);
+    --neo-border-thin: 2px solid var(--neo-ink);
+    --neo-shadow: 8px 8px 0 0 rgba(10, 10, 10, 0.30);
+    --neo-shadow-hover: 12px 12px 0 0 rgba(10, 10, 10, 0.20);
+    --neo-shadow-sm: 4px 4px 0 0 rgba(10, 10, 10, 0.25);
+    --neo-shadow-xs: 2px 2px 0 0 rgba(10, 10, 10, 0.20);
+
+    /* 字体（系统字体栈，无需外部加载） */
+    --neo-font: 'Avenir Next', 'Avenir', 'Futura', 'Century Gothic', 'Segoe UI',
+        'Roboto', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB',
+        'Microsoft YaHei', sans-serif;
+    --neo-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', 'Courier New', monospace;
+
+    /* 复用旧主题变量，让现有组件自动拾取新配色 */
+    --bs-main: var(--neo-accent);
+    --bs-backguound: var(--neo-bg);
+    --common-light-bg-one: var(--neo-card-bg);
+    --common-light-bg-two: var(--neo-bg);
+    --common-dark-bg-one: #232323;
+    --common-dark-bg-two: #2b2b2b;
+
+    /* 复用 notion 文章排版变量 */
+    --bg-color: var(--neo-card-bg);
+    --text-color: var(--neo-ink);
+    --body-text-color: var(--neo-ink);
+    --secondary-text-color: #5f5f5f;
+    --text-accent-color: var(--neo-ink);
+    --bg-color-dark: var(--neo-paper-2);
+    --code-fence-text-color: #50e3c2;
+    --code-fence-bg-color: #101010;
+    --blockquote-accent-color: var(--neo-ink);
+    --blockquote-bg-color: var(--neo-card-bg);
+    --blockquote-text-color: var(--neo-ink);
+    --url-text-color: var(--neo-accent);
+    --url-underline-color: var(--neo-accent);
+    --table-primary-color: var(--neo-card-bg);
+    --table-secondary-color: var(--neo-paper-2);
+    --code-color: var(--neo-accent);
+    --kbd-bg-color: var(--neo-paper-2);
+    --kbd-text-color: var(--neo-ink);
+    --text-highlight-bg: var(--neo-yellow);
+    --text-highlight-color: var(--neo-ink);
+}
+
+/* 深色模式：翻转纸张 / 卡片 / 墨色 */
+.dark {
+    --neo-bg: #171717;
+    --neo-card-bg: #232323;
+    --neo-ink: #ffffff;
+    --neo-paper-2: #2e2e2e;
+}
+
+/* 配色方案二：未来粗野（青紫科技） */
+html[data-theme="future"] {
+    --neo-bg: #F5F5F7;
+    --neo-card-bg: #FFFFFF;
+    --neo-ink: #1A1A2E;
+    --neo-paper-2: #E9E9EE;
+    --neo-accent: #00D4FF;
+    --neo-yellow: #8B5CF6;
+    --neo-cyan: #8B5CF6;
+    --neo-purple: #8B5CF6;
+    --neo-shadow: 6px 6px 0 0 rgba(26, 26, 46, 0.3);
+    --neo-shadow-sm: 4px 4px 0 0 rgba(26, 26, 46, 0.3);
+    --neo-shadow-xs: 2px 2px 0 0 rgba(26, 26, 46, 0.3);
+}
+
+/* 未来粗野：导航悬浮时文字改用亮青，避免紫字落在深空蓝黑底上对比不足 */
+html[data-theme="future"] .head_top .top_icon .top_icon_btn:hover,
+html[data-theme="future"] .header-menu .header-menu-ul li:hover > a {
+    color: var(--neo-accent) !important;
+}
+
+/* 配色方案三：暖阳粗野（橙黄温暖） */
+html[data-theme="warm"] {
+    --neo-bg: #FDF6EE;
+    --neo-card-bg: #FFFFFF;
+    --neo-ink: #2D1B0E;
+    --neo-paper-2: #F3E7D4;
+    --neo-accent: #FF6B35;
+    --neo-yellow: #F7C948;
+    --neo-cyan: #F7C948;
+    --neo-purple: #F7C948;
+    --neo-shadow: 6px 6px 0 0 rgba(45, 27, 14, 0.25);
+    --neo-shadow-sm: 4px 4px 0 0 rgba(45, 27, 14, 0.25);
+    --neo-shadow-xs: 2px 2px 0 0 rgba(45, 27, 14, 0.25);
+}
+
+/* 深色模式下按配色微调（背景 / 卡片 / 墨色 / 阴影） */
+html[data-theme="future"].dark {
+    --neo-bg: #14141E;
+    --neo-card-bg: #20202C;
+    --neo-ink: #E7E7F2;
+    --neo-paper-2: #2A2A3A;
+    --neo-shadow: 6px 6px 0 0 rgba(231, 231, 242, 0.35);
+    --neo-shadow-sm: 4px 4px 0 0 rgba(231, 231, 242, 0.35);
+    --neo-shadow-xs: 2px 2px 0 0 rgba(231, 231, 242, 0.35);
+}
+html[data-theme="warm"].dark {
+    --neo-bg: #1B120A;
+    --neo-card-bg: #2A1C10;
+    --neo-ink: #F4E8DA;
+    --neo-paper-2: #3A2A1A;
+    --neo-shadow: 6px 6px 0 0 rgba(244, 232, 218, 0.35);
+    --neo-shadow-sm: 4px 4px 0 0 rgba(244, 232, 218, 0.35);
+    --neo-shadow-xs: 2px 2px 0 0 rgba(244, 232, 218, 0.35);
+}
+
+/* -------------------------------------------------------------------------
+   1.1 经典粗野（红白档案）— 标志性元素
+   纯红白黑三色系统：红角 · 红条 · 黑页脚
+   ------------------------------------------------------------------------- */
+/* 头部：红底 + 无分割线（浅色/深色模式统一为红底） */
+html[data-theme="classic"]:not(.dark) .headbox {
+    background: var(--neo-primary);
+    border-bottom: none;
+}
+
+/* 分区标题下划线 → 红色粗条 */
+html[data-theme="classic"] .post-box .post-box-txt .latest_post:after {
+    background: var(--neo-primary);
+}
+
+/* 卡片：左上红角 + 底部红条（主卡片 & 文章列表） */
+html[data-theme="classic"] .post-box,
+html[data-theme="classic"] .post_list {
+    position: relative;
+}
+html[data-theme="classic"] .post-box {
+    box-shadow: var(--neo-shadow);
+}
+html[data-theme="classic"] .post-box::before,
+html[data-theme="classic"] .post_list::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 26px;
+    height: 26px;
+    background: var(--neo-primary);
+    border-right: var(--neo-border-thin);
+    border-bottom: var(--neo-border-thin);
+}
+html[data-theme="classic"] .post-box::after,
+html[data-theme="classic"] .post_list::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 36%;
+    height: 6px;
+    background: var(--neo-primary);
+    border-top: var(--neo-border-thin);
+    border-right: var(--neo-border-thin);
+}
+html[data-theme="classic"] .post_list::before {
+    width: 20px;
+    height: 20px;
+}
+html[data-theme="classic"] .post_list::after {
+    width: 30%;
+    height: 5px;
+}
+
+/* 元信息标签：红底白字 */
+html[data-theme="classic"] .post_list .post_loop_info span {
+    background: var(--neo-primary);
+    color: #FFFFFF;
+}
+
+/* 标签 & 元信息内链接：红底白字 */
+html[data-theme="classic"] .post_tag a,
+html[data-theme="classic"] .post_tag a:hover,
+html[data-theme="classic"] .post_list .post_loop_info span a {
+    color: #FFFFFF;
+}
+
+/* 阅读更多按钮：红底白字 */
+html[data-theme="classic"] .post_list .post_loop_more a {
+    color: #FFFFFF;
+}
+
+/* 页脚：黑底 + 红色顶边 + 亮红链接 */
+html[data-theme="classic"] .footer {
+    background: #0A0A0A;
+    background-image: none;
+    border-top: 6px solid var(--neo-primary);
+    padding-top: 50px;
+}
+html[data-theme="classic"] .footer h3 {
+    color: #FFFFFF;
+}
+html[data-theme="classic"] .footer p {
+    color: #B8B8B8;
+}
+html[data-theme="classic"] .footer a {
+    color: var(--neo-primary-light);
+}
+html[data-theme="classic"] .footer a:hover {
+    color: #FFFFFF;
+    border-bottom: 2px solid var(--neo-primary-light);
+}
+
+/* -------------------------------------------------------------------------
+   1.2 配色切换平滑过渡
+   ------------------------------------------------------------------------- */
+body, .headbox, .header-menu, .sub-menu, .post-loop, .post-box, .post_list,
+.page-navigator, .posts-nav, .post_tag, .footer, .scrollToTopBtn, .widget,
+.sidebar_canvas, .sider-collapse-title, .siderNav-menu-item,
+.reply-submit button, .collapseSearch, .searchForm input, .meapost,
+.post-markdown-style {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* -------------------------------------------------------------------------
+   2. 全局
+   ------------------------------------------------------------------------- */
+html,
+body {
+    background: var(--neo-bg);
+    color: var(--neo-ink);
+    font-family: var(--neo-font);
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--neo-ink);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.1s ease, background-color 0.1s ease;
+}
+
+/* -------------------------------------------------------------------------
+   3. 头部导航
+   ------------------------------------------------------------------------- */
+.headbox {
+    background: var(--neo-yellow);
+    border-bottom: none;
+    padding-top: 20px;
+}
+
+.head_top .logo {
+    color: var(--neo-ink);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.head_top .logo:hover {
+    color: var(--neo-ink);
+}
+
+.head_top .top_icon .top_icon_btn {
+    color: var(--neo-ink);
+    font-weight: 900;
+    border: 2px solid transparent;
+}
+
+.head_top .top_icon .top_icon_btn:hover {
+    background: var(--neo-ink);
+    color: var(--neo-yellow);
+}
+
+/* 桌面菜单 */
+.header-menu .header-menu-ul li > a {
+    color: var(--neo-ink);
+    font-weight: 900;
+    line-height: 40px;
+}
+
+.header-menu .header-menu-ul li:hover {
+    background: var(--neo-ink);
+}
+
+.header-menu .header-menu-ul li:hover > a {
+    color: var(--neo-yellow);
+}
+
+.header-menu .header-menu-ul li .sub-menu {
+    background: var(--neo-card-bg);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: 0;
+}
+
+.header-menu .header-menu-ul li .sub-menu li a {
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.header-menu .header-menu-ul li .sub-menu li:hover {
+    background: var(--neo-accent);
+}
+
+.header-menu .header-menu-ul li .sub-menu li a:hover {
+    color: var(--neo-ink);
+}
+
+.header-menu .header-menu-ul li.menu-item-has-children > a:after {
+    font-weight: 900;
+}
+
+/* -------------------------------------------------------------------------
+   4. 轮播 banner / 占位条
+   ------------------------------------------------------------------------- */
+#banner {
+    background: var(--neo-yellow);
+    border-bottom: 3px solid var(--neo-ink);
+}
+
+.nei_top {
+    background: var(--neo-yellow);
+    height: 130px;
+    border-bottom: 3px solid var(--neo-ink);
+}
+
+.banner_loop {
+    color: var(--neo-ink);
+}
+
+.banner_loop h2 {
+    font-weight: 900;
+}
+
+.banner_loop h2 a {
+    color: var(--neo-ink);
+}
+
+.banner_loop .beici {
+    color: rgba(0, 0, 0, 0.08);
+}
+
+.banner_loop .banner_loop_info span,
+.banner_loop .banner_loop_info span a {
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.banner_loop .banner_loop_info span a:hover {
+    border-bottom: 2px solid var(--neo-ink);
+}
+
+#banner .carousel-indicators button {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+    background: transparent;
+    opacity: 1;
+}
+
+#banner .carousel-indicators button.active {
+    background: var(--neo-ink);
+}
+
+#banner .carousel-control-prev i,
+#banner .carousel-control-next i {
+    color: rgba(0, 0, 0, 0.15);
+}
+
+/* -------------------------------------------------------------------------
+   5. 主内容区 & 大卡片
+   ------------------------------------------------------------------------- */
+.post-loop {
+    background-image: none;
+    background-color: var(--neo-bg);
+}
+
+.post-loop .post-box {
+    background: var(--neo-card-bg);
+    background-image: none;
+    border: var(--neo-border);
+    box-shadow: 8px 8px 0 0 var(--neo-ink);
+    border-radius: 0;
+    padding: 70px 60px;
+}
+
+/* 分区标题（最新文章 / 归档 / 标签…） */
+.post-box .post-box-txt .latest_post {
+    font-weight: 900;
+    letter-spacing: 0;
+    font-size: 28px;
+    text-align: left;
+    color: var(--neo-ink);
+}
+
+.post-box .post-box-txt .latest_post:after {
+    width: 60px;
+    height: 4px;
+    background: var(--neo-ink);
+    left: 0;
+    bottom: -10px;
+}
+
+/* -------------------------------------------------------------------------
+   6. 文章列表项（卡片）
+   ------------------------------------------------------------------------- */
+.post-loop .post_loop .post_list:not(.post_list_shuoshuo) {
+    background: var(--neo-card-bg);
+    border: var(--neo-border-thin);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: 0;
+    padding: 30px 34px;
+    margin-bottom: 36px;
+}
+
+.post_list .post_beici {
+    position: absolute;
+    left: auto;
+    right: 14px;
+    top: 4px;
+    font-size: 6rem;
+    opacity: 0.12;
+    color: var(--neo-ink);
+    font-weight: 900;
+    line-height: 1;
+}
+
+.post_list h2 {
+    font-size: 30px;
+    line-height: 1.3;
+    font-weight: 900;
+}
+
+.post_list h2 a {
+    color: var(--neo-ink);
+}
+
+.post_list h2 a:hover {
+    background: var(--neo-yellow);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    padding: 0 4px;
+}
+
+.post_list h1 {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.post_list p {
+    color: var(--neo-ink);
+    font-weight: 500;
+}
+
+/* 元信息（作者 / 分类 / 日期） → 亮色小标签 */
+.post_list .post_loop_info {
+    color: var(--neo-ink);
+}
+
+.post_list .post_loop_info span {
+    display: inline-block;
+    background: var(--neo-yellow);
+    border: 1px solid var(--neo-ink);
+    padding: 3px 10px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--neo-ink);
+    border-radius: 0;
+}
+
+.post_list .post_loop_info span:before {
+    display: none;
+}
+
+.post_list .post_loop_info span a {
+    color: var(--neo-ink);
+}
+
+.post_list .post_loop_info span a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+}
+
+/* 阅读更多按钮 */
+.post_list .post_loop_more a {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    font-weight: 800;
+    padding: 12px 30px;
+    border-radius: 0;
+}
+
+.post_list .post_loop_more a:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
+
+.post_list .post_loop_more a:last-child {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   7. 关于 / 状态区（top-section）
+   ------------------------------------------------------------------------- */
+.top-section {
+    background: var(--neo-card-bg);
+    border: var(--neo-border);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: 0;
+}
+
+.display_user .name {
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.display_user img,
+.top-section-left img {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+}
+
+.media-accounts .account {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+.account img {
+    border-radius: 0;
+}
+
+.site-status li {
+    background: var(--neo-yellow);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    border-radius: 0;
+    font-weight: 800;
+    color: var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   8. 归档 / 分类 / 标签 列表
+   ------------------------------------------------------------------------- */
+.post-loop .post-box .mod-archive-name {
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.post-loop .post-box .mod-archive-list {
+    border-left: 4px solid var(--neo-ink);
+}
+
+.post-loop .post-box .mod-archive-list li {
+    font-weight: 600;
+}
+
+.post-loop .post-box .mod-archive-list li a {
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.post-loop .post-box .mod-archive-list li a:hover {
+    background: var(--neo-yellow);
+    padding-left: 8px;
+    margin-right: -8px;
+    color: var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   9. 说说（moments）时间线
+   ------------------------------------------------------------------------- */
+.post-date-day {
+    color: var(--neo-accent);
+    font-weight: 900;
+}
+
+.post-date-month {
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.post-date:after {
+    background: var(--neo-ink);
+    border-radius: 0;
+}
+
+.post_list_shuoshuo:before {
+    background: var(--neo-ink);
+    opacity: 0.15;
+}
+
+/* -------------------------------------------------------------------------
+   10. 分页器
+   ------------------------------------------------------------------------- */
+.page-navigator li a {
+    color: var(--neo-ink);
+    background: var(--neo-card-bg);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    font-weight: 800;
+    padding: 10px 16px;
+    border-radius: 0;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.page-navigator li a:hover {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+.page-navigator li a:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.page-navigator li.current a {
+    background: var(--neo-ink);
+    color: var(--neo-card-bg);
+}
+
+.posts-nav .page-numbers {
+    background: var(--neo-card-bg);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    font-weight: 800;
+    border-radius: 0;
+}
+
+.posts-nav .current,
+.posts-nav .page-numbers:hover {
+    background: var(--neo-ink);
+    color: var(--neo-card-bg);
+}
+
+/* -------------------------------------------------------------------------
+   11. 文章正文（meapost & post-markdown-style）
+   ------------------------------------------------------------------------- */
+.meapost,
+.post-markdown-style {
+    font-family: var(--neo-font);
+    color: var(--neo-ink);
+}
+
+.meapost h1,
+.meapost h2,
+.meapost h3,
+.meapost h4,
+.meapost h5,
+.meapost h6,
+.post-markdown-style h1,
+.post-markdown-style h2,
+.post-markdown-style h3,
+.post-markdown-style h4,
+.post-markdown-style h5,
+.post-markdown-style h6 {
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.post-markdown-style h1,
+.post-markdown-style h2 {
+    border-bottom: 3px solid var(--neo-ink);
+    padding-bottom: 0.3em;
+}
+
+/* 正文链接：去下划线 + 粗体 + 悬停反转 */
+.meapost p a,
+.meapost ul li a,
+.meapost ol li a,
+.post-markdown-style a {
+    color: var(--neo-accent);
+    font-weight: 800;
+    border-bottom: 2px solid var(--neo-accent);
+    text-decoration: none;
+}
+
+.meapost p a:hover,
+.post-markdown-style a:hover {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    border-bottom-color: var(--neo-ink);
+}
+
+/* 引用块：左侧 4px 黑色粗边框 */
+.meapost blockquote,
+.post-markdown-style blockquote {
+    border: 2px solid var(--neo-ink);
+    border-left: 6px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    background: var(--neo-card-bg);
+    color: var(--neo-ink);
+}
+
+.meapost blockquote:before {
+    background: var(--neo-accent);
+    border: 2px solid var(--neo-ink);
+    border-radius: 0;
+    color: var(--neo-ink);
+}
+
+.meapost blockquote p {
+    font-weight: 800;
+    color: var(--neo-ink);
+}
+
+/* 图片：3px 黑色边框 */
+.meapost img,
+.post-markdown-style img,
+.post-markdown-style .md-image img {
+    border: 3px solid var(--neo-ink);
+    border-radius: 0;
+}
+
+/* 代码块：粗黑边框 + 等宽字体 + 纯黑背景
+   代码块相关颜色固定，不随配色方案（classic / future / warm）变化 */
+.meapost pre,
+.post-markdown-style pre,
+.post-markdown-style .md-fences {
+    background: #101010;
+    border: 3px solid #000000;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 0 #000000;
+}
+
+.meapost pre code,
+.post-markdown-style code,
+.post-markdown-style .md-fences {
+    font-family: var(--neo-mono);
+    color: #f0f0f0;
+}
+
+.meapost pre code {
+    background: #101010;
+    color: #f0f0f0;
+}
+
+/* 内联代码：固定黄底黑字，不随配色方案变化 */
+.post-markdown-style code {
+    background-color: #FFD700;
+    color: #000000;
+    border: 1px solid #000000;
+    border-radius: 0;
+    font-weight: 600;
+}
+
+.post-markdown-style .md-fences {
+    background: #101010;
+    color: #f0f0f0;
+}
+
+/* 表格：黑边框 */
+.post-markdown-style table tr th,
+.post-markdown-style table tr td {
+    border: 1px solid var(--neo-ink);
+}
+
+.post-markdown-style table tr:nth-child(2n) {
+    background-color: var(--neo-paper-2);
+}
+
+.post-markdown-style table tr:nth-child(2n + 1) {
+    background-color: var(--neo-card-bg);
+}
+
+/* 高亮 */
+.post-markdown-style mark {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+/* 标签块 */
+.post_tag a {
+    background: var(--neo-cyan);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    font-weight: 800;
+    border-radius: 0;
+}
+
+.post_tag a:hover {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+.post_tag a:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.post_tag span {
+    background: var(--neo-card-bg);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    font-weight: 800;
+}
+
+/* 上一篇 / 下一篇 */
+.post-next a,
+.post-prev a {
+    font-weight: 800;
+    color: var(--neo-ink);
+}
+
+.post-next a:hover,
+.post-prev a:hover {
+    background: var(--neo-yellow);
+}
+
+.next_prev_beici {
+    color: var(--neo-ink);
+}
+
+/* 作者信息 */
+.post_author img {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+}
+
+.post_author .author_txt a {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    font-weight: 800;
+    border-radius: 0;
+}
+
+.post_author .author_txt a:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------
+   12. 评论
+   ------------------------------------------------------------------------- */
+.comment-list img.avatar {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+}
+
+.reply-text textarea,
+.response-input input {
+    background: var(--neo-card-bg);
+    border: 2px solid var(--neo-ink) !important;
+    border-radius: 0;
+    color: var(--neo-ink);
+}
+
+.reply-submit button {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    font-weight: 800;
+    border-radius: 0;
+}
+
+.reply-submit button:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
+
+.comment-reply a {
+    color: var(--neo-ink);
+    font-weight: 800;
+    border-bottom: 2px solid var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   13. 侧边栏（移动端 offcanvas） & 小组件
+   ------------------------------------------------------------------------- */
+.right-slide-header {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+    border-bottom: 3px solid var(--neo-ink);
+}
+
+.right-slide-header button i {
+    color: var(--neo-ink);
+}
+
+.sidebar_box {
+    background: var(--neo-bg);
+}
+
+.widget {
+    background: var(--neo-card-bg);
+    border: var(--neo-border-thin);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: 0;
+}
+
+.widget-title {
+    font-weight: 900;
+    color: var(--neo-ink);
+}
+
+.widget-title:before {
+    background: var(--neo-accent);
+    border-radius: 0;
+    border: 1px solid var(--neo-ink);
+}
+
+.widget-title:after {
+    background: var(--neo-ink);
+}
+
+/* 侧边栏菜单 */
+.sider-collapse {
+    border-radius: 0 !important;
+    border: none !important;
+    overflow: visible;
+}
+
+.sider-collapse-item {
+    background: var(--neo-card-bg);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    border-radius: 0;
+    margin-bottom: 12px;
+}
+
+.sider-collapse-item:first-child {
+    border-top: 2px solid var(--neo-ink);
+}
+
+.sider-collapse-item:hover .sider-collapse-title,
+.sider-collapse-item:hover .siderNav-menu-item {
+    background: var(--neo-yellow) !important;
+}
+
+.sider-collapse-title {
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.item-bg {
+    background-color: var(--neo-card-bg) !important;
+}
+
+.siderNav-menu-item {
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.sider-collapse-content {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 2px solid var(--neo-ink);
+    background: var(--neo-bg);
+}
+
+.siderNav-sub-menu li a {
+    background: var(--neo-yellow);
+    border: 1px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    border-radius: 0;
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.siderNav-sub-menu li a:hover {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+}
+
+/* 侧边栏 tabs */
+.sider-tabs {
+    border-bottom: none;
+    gap: 8px;
+}
+
+.sider-tabs .nav-link {
+    color: var(--neo-ink);
+    font-weight: 800;
+    background: var(--neo-card-bg);
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-xs);
+    border-radius: 0;
+    margin: 0;
+    padding: 0 16px;
+    line-height: 34px;
+    min-width: 0;
+}
+
+.sider-tabs .nav-link:hover {
+    background: var(--neo-yellow);
+}
+
+.sider-tabs .nav-link.active {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    box-shadow: none;
+    transform: translate(2px, 2px);
+}
+
+.sider-tabs .nav-link.active::after {
+    display: none;
+}
+
+/* 分类菜单（归档 tab） */
+.widget_nav_menu .menu li a {
+    background: var(--neo-yellow);
+    border: 1px solid var(--neo-ink);
+    border-radius: 0;
+    color: var(--neo-ink);
+    font-weight: 700;
+}
+
+.widget_nav_menu .menu li a:hover {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   14. 友链（block-friend / block-down）
+   ------------------------------------------------------------------------- */
+.meapost .block-friend {
+    border: 2px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    background: var(--neo-card-bg);
+    color: var(--neo-ink);
+    border-radius: 0;
+    padding: 20px;
+}
+
+.meapost .block-friend p {
+    color: var(--neo-ink);
+}
+
+.meapost .block-extra img,
+.meapost .block-book img {
+    border: 3px solid var(--neo-ink);
+    box-shadow: 5px 5px 0 0 var(--neo-ink);
+}
+
+.block-down-button {
+    background: var(--neo-accent);
+    border: 2px solid var(--neo-ink);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    border-radius: 0;
+}
+
+.block-down-button p {
+    color: var(--neo-ink);
+    font-weight: 800;
+}
+
+.block-down-footer {
+    border-top: 3px solid var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   15. 页脚
+   ------------------------------------------------------------------------- */
+.footer {
+    background: var(--neo-bg);
+    background-image: none;
+    border-top: 3px solid var(--neo-bg);
+}
+
+.footer h3 {
+    color: var(--neo-ink);
+    font-weight: 900;
+}
+
+.footer p {
+    color: var(--neo-ink);
+    font-weight: 600;
+}
+
+.footer p a {
+    color: var(--neo-accent);
+    font-weight: 800;
+}
+
+/* -------------------------------------------------------------------------
+   16. 返回顶部按钮
+   ------------------------------------------------------------------------- */
+.scrollToTopBtn {
+    background: var(--neo-accent);
+    color: var(--neo-ink);
+    border: 3px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    border-radius: 0;
+}
+
+.scrollToTopBtn:hover {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+.scrollToTopBtn:active {
+    transform: translateY(0) translate(4px, 4px);
+    box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------
+   17. 搜索弹层
+   ------------------------------------------------------------------------- */
+.collapseSearch {
+    background: var(--neo-yellow);
+    border-bottom: 3px solid var(--neo-ink);
+    box-shadow: none;
+}
+
+.searchForm input {
+    color: var(--neo-ink);
+    border-bottom: 3px solid var(--neo-ink);
+    font-weight: 700;
+}
+
+.searchForm input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.searchButton i {
+    color: var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   18. 深色模式下的局部修正
+   ------------------------------------------------------------------------- */
+.dark .headbox,
+.dark #banner,
+.dark .nei_top,
+.dark .right-slide-header,
+.dark .collapseSearch {
+    background: var(--neo-yellow);
+}
+
+.dark .head_top .logo,
+.dark .banner_loop h2 a,
+.dark .banner_loop,
+.dark .banner_loop .banner_loop_info span,
+.dark .banner_loop .banner_loop_info span a,
+.dark .right-slide-header button i,
+.dark .header-menu .header-menu-ul li > a,
+.dark .head_top .top_icon .top_icon_btn,
+.dark .searchForm input,
+.dark .searchButton i {
+    color: #000000;
+}
+
+.dark .head_top .top_icon .top_icon_btn:hover,
+.dark .header-menu .header-menu-ul li:hover {
+    background: #000000;
+}
+
+.dark .head_top .top_icon .top_icon_btn:hover,
+.dark .header-menu .header-menu-ul li:hover > a {
+    color: var(--neo-yellow);
+}
+
+/* -------------------------------------------------------------------------
+   19. 亮色底元素上的文字始终为黑色（保证高对比度，亮色/深色模式通用）
+   ------------------------------------------------------------------------- */
+.post_list .post_loop_info span,
+.post_list .post_loop_info span a,
+.post_list .post_loop_more a,
+.post_list .post_loop_more a:last-child,
+.site-status li,
+.media-accounts .account,
+.post_tag a,
+.post_author .author_txt a,
+.reply-submit button,
+.siderNav-sub-menu li a,
+.widget_nav_menu .menu li a,
+.block-down-button p,
+.scrollToTopBtn,
+.post-markdown-style code,
+.sider-tabs .nav-link.active {
+    color: #000000;
+}
+
+/* 响应式微调 */
+@media (max-width: 768px) {
+    .post-loop .post-box {
+        padding: 30px 20px;
+    }
+
+    .post-loop .post_loop .post_list:not(.post_list_shuoshuo) {
+        padding: 22px 20px;
+    }
+
+    .post_list .post_beici {
+        font-size: 4rem;
+    }
+
+    /* 覆盖 style.css 在移动端把首字定位到左侧的规则 */
+    .post-loop .post-box .post_loop .post_list .post_beici {
+        left: auto;
+        right: 10px;
+        top: 4px;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   20. 深色模式下强制关键亮色元素保持亮色底 + 黑字
+   （用 !important 覆盖 style.css 深色规则里的冲突）
+   ------------------------------------------------------------------------- */
+.dark .site-status li,
+.dark .widget_nav_menu .menu li a,
+.dark .siderNav-sub-menu li a {
+    background: var(--neo-yellow) !important;
+    color: #000000 !important;
+    border: 1px solid var(--neo-ink) !important;
+}
+
+.dark .post_list .post_loop_more a {
+    background: var(--neo-accent) !important;
+    color: #000000 !important;
+    border: 2px solid var(--neo-ink) !important;
+}
+
+.dark .post_list .post_loop_more a:last-child {
+    background: var(--neo-yellow) !important;
+    color: #000000 !important;
+    border: 2px solid var(--neo-ink) !important;
+}
+
+.dark .sider-collapse-item {
+    border: 2px solid var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   21. 动画（neobrutalism motion）
+   原则：干脆利落 · 物理触感 · 不过度
+   缓动：入场/下划线用 overshoot 曲线，交互反馈用线性/ease
+   ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+   21.1 入场动画 —— 卡片堆叠展开
+   内容卡片像从桌面上一张张抽出的纸张。
+   用 fill-mode: backwards：延迟期间保持初始态（隐藏），动画结束后回归元素自身样式
+   （阴影/位移不残留，避免覆盖各配色已定的硬阴影）。
+   ------------------------------------------------------------------------- */
+@keyframes neo-stack-in {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        box-shadow: 0 0 0 0 transparent;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: var(--neo-shadow);
+    }
+}
+
+.top-section,
+.post_list,
+.widget {
+    animation: neo-stack-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+/* 文章列表逐张抽出，步长 0.05s，最多到第 6 张（后续交给 ajax 加载） */
+.post_loop .post_list:nth-child(1) { animation-delay: 0.05s; }
+.post_loop .post_list:nth-child(2) { animation-delay: 0.10s; }
+.post_loop .post_list:nth-child(3) { animation-delay: 0.15s; }
+.post_loop .post_list:nth-child(4) { animation-delay: 0.20s; }
+.post_loop .post_list:nth-child(5) { animation-delay: 0.25s; }
+.post_loop .post_list:nth-child(6) { animation-delay: 0.30s; }
+
+/* -------------------------------------------------------------------------
+   21.2 卡片 —— 悬停浮动 + 点击下沉（模拟纸张/积木的物理按压）
+   transform / box-shadow 与配色过渡合并，避免互相覆盖。
+   ------------------------------------------------------------------------- */
+.top-section,
+.post_list,
+.widget,
+.sider-collapse-item {
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.top-section:hover,
+.post_list:hover,
+.widget:hover,
+.sider-collapse-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 10px 10px 0 0 var(--neo-ink);
+}
+
+.top-section:active,
+.post_list:active,
+.widget:active,
+.sider-collapse-item:active {
+    transform: translateY(2px);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    transition-duration: 0.05s;
+}
+
+/* -------------------------------------------------------------------------
+   21.3 按钮 —— 弹跳按压
+   悬停上浮 + 阴影加大，点击时位移 + 阴影消失（原有 :active 规则已实现按压）。
+   ------------------------------------------------------------------------- */
+.post_list .post_loop_more a,
+.post_author .author_txt a,
+.reply-submit button,
+.block-down-button,
+.page-navigator li a,
+.posts-nav .page-numbers,
+.sider-tabs .nav-link,
+.scrollToTopBtn {
+    transition: transform 0.1s ease, box-shadow 0.1s ease,
+        background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.post_list .post_loop_more a:hover,
+.post_author .author_txt a:hover,
+.reply-submit button:hover,
+.block-down-button:hover,
+.page-navigator li a:hover,
+.posts-nav .page-numbers:hover,
+.sider-tabs .nav-link:hover,
+.scrollToTopBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0 0 var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   21.4 标签 / 元信息 —— 悬停反色 + 缩放闪烁
+   悬停：背景翻转为墨色、文字翻转为卡片色、轻微放大；点击缩小。
+   ------------------------------------------------------------------------- */
+.post_tag a,
+.post_list .post_loop_info span {
+    transition: transform 0.1s ease, background-color 0.15s ease,
+        color 0.15s ease, border-color 0.15s ease;
+}
+
+.post_tag a:hover,
+.post_list .post_loop_info span:hover {
+    background: var(--neo-ink);
+    color: var(--neo-card-bg);
+    transform: scale(1.05);
+}
+
+.post_tag a:active,
+.post_list .post_loop_info span:active {
+    transform: scale(0.95);
+}
+
+/* 标签 / 元信息内链接悬停时保持反色白字（避免被下面 21.5 的下划线影响） */
+.post_list .post_loop_info span a:hover {
+    color: var(--neo-card-bg);
+}
+
+/* -------------------------------------------------------------------------
+   21.5 链接 —— 粗野划线
+   悬停时从左侧展开一条 3px 手工划线（overshoot 曲线），替代原有的背景高亮。
+   ------------------------------------------------------------------------- */
+.post_list h2 a,
+.post-next a,
+.post-prev a,
+.mod-archive-list li a,
+.comment-reply a {
+    position: relative;
+}
+
+.post_list h2 a::after,
+.post-next a::after,
+.post-prev a::after,
+.mod-archive-list li a::after,
+.comment-reply a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--neo-accent);
+    transition: width 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.post_list h2 a:hover::after,
+.post-next a:hover::after,
+.post-prev a:hover::after,
+.mod-archive-list li a:hover::after,
+.comment-reply a:hover::after {
+    width: 100%;
+}
+
+/* 移除旧的高亮式悬停，改由下划线承担 */
+.post_list h2 a:hover {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.post-loop .post-box .mod-archive-list li a:hover {
+    background: none;
+    padding-left: 0;
+    margin-right: 0;
+}
+
+.post-next a:hover,
+.post-prev a:hover {
+    background: none;
+}
+
+.comment-reply a {
+    border-bottom: none;
+}
+
+/* -------------------------------------------------------------------------
+   21.6 滚动进度条 —— 粗野风格
+   固定在页面顶部的一条 4px 硬边框进度条。
+   ------------------------------------------------------------------------- */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: var(--neo-accent);
+    border-bottom: 2px solid var(--neo-ink);
+    z-index: 9999;
+    transition: width 0.1s linear;
+}
+
+/* -------------------------------------------------------------------------
+   21.7 减少动效偏好
+   尊重系统 "prefers-reduced-motion"，关闭全部动画与过渡。
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .top-section,
+    .post_list,
+    .widget,
+    .sider-collapse-item,
+    .post_tag a,
+    .post_list .post_loop_info span,
+    .post_list .post_loop_more a,
+    .post_author .author_txt a,
+    .reply-submit button,
+    .block-down-button,
+    .page-navigator li a,
+    .posts-nav .page-numbers,
+    .sider-tabs .nav-link,
+    .scrollToTopBtn {
+        animation: none !important;
+        transition: none !important;
+    }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" th:data-theme="${theme.config?.styles?.color_schema ?: 'classic'}" th:fragment="html (title, content, header, navbar, ajaxscrolljs)">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title th:text="${#strings.defaultString(title, site.title)}"></title>
+    <link rel='stylesheet' id='bootstrap-css' th:href="@{/assets/css/bootstrap.min.css(v=${theme.spec.version})}" href='./assets/css/bootstrap.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='bifont-css' th:href="@{/assets/css/bootstrap-icons.css(v=${theme.spec.version})}" href='./assets/css/bootstrap-icons.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='stylecss-css' th:href="@{/assets/css/style.css(v=${theme.spec.version})}" href='./assets/css/style.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='stylecss-css' th:href="@{/assets/css/markdown/notion-light-classic.css}" type='text/css' media='all' />
+    
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/assets/js/jquery.min.js(v=${theme.spec.version})}" id="jquery-min-js"></script>
+    <style th:text="${theme.config?.styles?.color_schema}=='future'?':root{--bs-main:#00D4FF;--bs-backguound:#F5F5F7}':(${theme.config?.styles?.color_schema}=='warm'?':root{--bs-main:#FF6B35;--bs-backguound:#FDF6EE}':':root{--bs-main:#D32F2F;--bs-backguound:#F0EDE8}')"></style>
+    <!-- Neo-Brutalism 皮肤（最后引入，覆盖默认视觉） -->
+    <link rel='stylesheet' id='neo-brutalism-css' th:href="@{/assets/css/neo-brutalism.css(v=${theme.spec.version})}" href='./assets/css/neo-brutalism.css' type='text/css' media='all' />
+  </head>
+  <body class="home blog" >
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <th:block th:if="${header}" th:replace="${header}" />
+
+    <th:block th:replace="${content}" />
+    <button class="scrollToTopBtn" title="返回顶部"><i class="bi bi-chevron-up"></i></button>
+    <footer class="footer">
+        <div class="container">
+            <halo:footer />
+            <h3 th:text="${theme.config?.base_info?.one_word}"></h3>
+            <p>
+                ©
+                <span
+                  id="site_date"
+                  th:with="now=${#temporals.createNow()}"
+                  th:text="${#temporals.format(now, 'yyyy')}"
+                ></span>
+                <span th:text="${site?.title}"></span>. 
+                Powered by <a href="https://halo.run" target="_blank">Halo</a>
+                Modify by <a href="https:dzbook.top/" target="_blank">loster</a>
+            </p>
+            <th:block th:if="${theme.config?.base_info.icp_number}">
+            <p><a class="beian" href="https://beian.miit.gov.cn/" rel="external nofollow" target="_blank" title="备案号"><i class="bi bi-shield-check me-1"></i><th:block th:text="${theme.config?.base_info.icp_number}"></th:block></a></p>
+            </th:block>
+        </div>
+    </footer>
+    <th:block th:insert="~{fragments/common :: menu_right}"></th:block>
+    <script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js(v=${theme.spec.version})}" id="bootstrap-js"></script>
+    <script type="text/javascript" th:src="@{/assets/js/main.js(v=${theme.spec.version})}" id="main-js"></script>
+  </body>
+    <th:block th:if="${ajaxscrolljs}" th:replace="${ajaxscrolljs}" />
+  </body>
+</html>

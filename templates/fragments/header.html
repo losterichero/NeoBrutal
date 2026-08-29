@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+  <th:block th:fragment="content">
+    <header class="headbox">
+      <div class="container">
+        <div class="head_top">
+          <a class="logo" th:href="@{/}">
+            <img th:if="${theme.config?.styles?.logo_title == '2' || theme.config?.styles?.logo_title == '1'}" th:src="${site?.logo}" th:alt="${site?.title}">
+            <b th:if="${theme.config?.styles?.logo_title == '2' || theme.config?.styles?.logo_title == '0'}" th:text="${site?.title}"></b>
+          </a>
+          <div class="top_right">
+            <th:block th:insert="~{fragments/common :: menu_main}"></th:block>
+          </div>
+        </div>
+      </div>
+    </header>
+  </th:block>
+</html>

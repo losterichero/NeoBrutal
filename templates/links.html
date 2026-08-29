@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{fragments/layout :: html(title = '友情链接', content = ~{::content}, header = ~{fragments/header::content}, navbar = ~{}, ajaxscrolljs = ~{})}">
+<th:block th:fragment="content">
+  <div class="nei_top"></div>
+  <section class="post-loop">
+    <div class="container">
+      <div class="post-box">
+        <div class="post_list post_head_title">
+          <div class="post_beici" data-text="友邻"></div>
+          <h1>友邻</h1>
+          <div class="post_loop_info">
+          </div>
+        </div>
+          <th:block th:each="group : ${groups}" th:if="${not #lists.isEmpty(group.links)}">
+          <article class="meapost">
+          <h2 th:if="${#lists.size(groups) > 1}" th:text="${group.spec.displayName}"></h2>
+          </article>
+          <article class="meapost">
+            <blockquote class="block-extra block-friend" th:each="link : ${group.links}">
+              <a rel="noopener" target="_blank" th:href="@{${link.spec.url}}" >
+              <p  th:text="${link.spec.displayName}"></p>
+              <p style="font-size: 13px;" th:text="${link.spec.description}"></p>
+            
+            </a>
+            </blockquote>
+          </article>
+        </th:block>
+        <div class="post_tag">
+        </div>
+      </div>
+      <div class="comment-comment">
+        <halo:comment
+          group="content.halo.run"
+          kind="Post"
+          name="友链"
+        />  
+      </div>
+    </div>
+
+
+  </section>
+
+  <script th:inline="javascript">
+    /* 在这里编写 JavaScript 代码 */
+    var myData = [[ ${groups} ]]
+    console.log(myData); // 示例：将后端数据输出到控制台
+  </script>
+</th:block>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{fragments/layout :: html(title=${site.title}, content = ~{::content}, header = ~{fragments/header::content}, navbar = ~{}, ajaxscrolljs = ~{::ajaxscrolljs})}"
+>
+  <th:block th:fragment="content">
+      <section id="banner" class="carousel slide" data-bs-ride="carousel"  th:if="${not #arrays.isEmpty(theme.config.styles.banners)}">
+        <div class="carousel-indicators">
+          <button th:each="feature, index : ${theme.config.styles.banners}" type="button" data-bs-target="#banner" th:data-bs-slide-to="${index.index}" th:class="${index.index} == 0?'active':''"></button>
+        </div>
+        <div class="carousel-inner">
+          <div th:each="feature, index : ${theme.config.styles.banners}" th:class="${index.index} == 0?'carousel-item active':'carousel-item'">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-md-10">
+                  <div class="banner_loop">
+                    <div class="beici" th:data-text="${feature.title}"></div>
+                    <h2>
+                      <a th:href="${feature.link}" th:title="${feature.title}" th:text="${feature.title}"></a>
+                    </h2>
+                    <div class="banner_loop_info">
+                      <p th:text="${feature.subtitle}"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#banner" data-bs-slide="prev">
+          <i class="bi bi-chevron-compact-left"></i>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#banner" data-bs-slide="next">
+          <i class="bi bi-chevron-compact-right"></i>
+        </button>
+      </section>
+    <div class="nei_top" th:if="${#arrays.isEmpty(theme.config.styles.banners)}"></div>
+    <section class="post-loop">
+      <div class="container">
+
+        <div class="post-box">
+
+          <div class="top-section">
+           <!-- <div class="top-section-title">关于</div> -->
+            <div class="top-section-box" th:with="base_info = ${theme.config?.base_info}">
+              <div class="top-section-left">
+                <div class="display_user" th:with="user = ${contributorFinder.getContributor(base_info?.display_user)}">
+                  <img th:src="@{${user.avatar}}" alt="">
+                  <div>
+                    <div class="name" th:text="${user.displayName}"></div>
+                    <div class="bio" th:text="${user.bio}"></div>
+                  </div>
+                </div>
+           
+
+              </div>
+
+              <div class="media-accounts" th:if="${#arrays.length(base_info.media_accounts)} > 0">
+                <div class="account" th:each="item : ${base_info?.media_accounts}"> 
+                  <a th:href="@{${item.url}}">
+                    <img th:if="${item.logo} != ''" th:src="@{${item.logo}}" alt="">
+                    <div th:if="${item.logo} == ''" th:text="${item?.name.substring(0, 1)}"></div>
+                  </a>
+                </div>
+
+              </div>
+              <div class="top-section-right">
+                <div class="running-time-box">站点已运行：<span class="running-time"></span></div>
+                <ul class="site-status" th:with="stats = ${siteStatsFinder.getStats()}">
+                  <li >文章数量: <span th:text="${stats.post}"></span> </li>
+                  <li>浏览量:<span  th:text="${ stats.visit}"></span> </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="post-box-txt">
+
+            <h3 class="latest_post">最新文章</h3>
+          </div>
+          <div class="post_loop">
+            <th:block th:insert="~{fragments/posts :: post(${posts})}"></th:block>
+          </div>
+          <th:block th:if="${theme.config?.styles?.need_ajax_scroll}">
+          <div class="no-more">没有更多了~</div>
+          <div id="spinner" class="spinner">
+              <div class="spinner-grow" role="status">
+                  <span class="visually-hidden"></span>
+              </div>
+          </div>
+          </th:block>
+          <th:block th:insert="~{fragments/posts :: pagination}"></th:block>
+        </div>
+      </div>
+    </section>
+
+    <div th:with="base_info = ${theme.config?.base_info}"> 
+      <script   th:inline="javascript" >
+        let dateString  = [[${base_info?.site_running_time}]]
+
+        // 缓存时间
+        sessionStorage.setItem('dateString',dateString)
+        const date = sessionStorage.getItem('dateString')
+
+        function timeBetweenDates(dateString) {
+          console.log(dateString)
+          const givenDate = new Date(dateString);
+          const currentDate = new Date();
+    
+          const timeDifference = currentDate - givenDate;
+    
+          const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+    
+          return {days, hours, minutes, seconds}
+        }
+        
+        function updateTimeDifference() {
+          const timeDifference = timeBetweenDates(date);
+          const timeDifferenceString = `${timeDifference.days} 天 ${timeDifference.hours} 小时 ${timeDifference.minutes} 分钟 ${timeDifference.seconds} 秒。`;
+          const element = document.querySelector('.running-time');
+          element.innerText = timeDifferenceString;
+        }
+    
+        // 每秒更新一次时间差
+        setInterval(updateTimeDifference, 1000);
+      </script>
+  
+    </div>
+  </th:block>
+  <th:block th:fragment="ajaxscrolljs" th:insert="~{fragments/ajaxscrolljs :: ajaxscrolljs}"></th:block>
+
+
+
+  
+</html>
