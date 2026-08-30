@@ -34,9 +34,8 @@
                   th:with="now=${#temporals.createNow()}"
                   th:text="${#temporals.format(now, 'yyyy')}"
                 ></span>
-                <span th:text="${site?.title}"></span>. 
-                Powered by <a href="https://halo.run" target="_blank">Halo</a>
-                Modify by <a href="https:dzbook.top/" target="_blank">loster</a>
+                <span th:text="${site?.title}"></span>
+        
             </p>
             <th:block th:if="${theme.config?.base_info.icp_number}">
             <p><a class="beian" href="https://beian.miit.gov.cn/" rel="external nofollow" target="_blank" title="备案号"><i class="bi bi-shield-check me-1"></i><th:block th:text="${theme.config?.base_info.icp_number}"></th:block></a></p>

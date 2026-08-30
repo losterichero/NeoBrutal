@@ -244,8 +244,9 @@ h6 {
 /*head*/
 .headbox {
     background: var(--bs-main);
+    position: relative;
     top: 0px;
-    z-index: 3;
+    z-index: 100;
     padding-top: 30px;
 }
 .header-sticky{
@@ -273,7 +274,7 @@ h6 {
 }
 
 .fixednav {
-    z-index: 5;
+    z-index: 100;
     top: -30px;
     animation: wrapper-gradient 0.3s linear;
 }
@@ -2362,24 +2363,97 @@ h6 {
     opacity: 0;
 }
 
-.meapost .block-friend:before {
-    content: "\F77A";
-    left: -20px;
-    top: 25px;
-    border-radius: 3px;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
+/* ================= 友链卡片（links.html） ================= */
+.friend-list {
+    margin-bottom: 20px;
 }
 
-.meapost .block-friend {
-    padding-left: 80px;
-    width: calc(50% - 40px);
-    display: inline-block;
+.friend-group-title {
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin: 24px 0 20px;
+    padding-left: 12px;
 }
 
-.meapost .block-friend:nth-child(even) {
-    margin-left: 60px;
+.friend-group-title:first-child {
+    margin-top: 0;
+}
+
+.friend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.friend-card {
+    margin: 0;
+}
+
+.friend-card-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 16px;
+}
+
+.friend-avatar {
+    position: relative;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+}
+
+.friend-avatar-letter {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.friend-card.has-favicon .friend-avatar-letter {
+    display: none;
+}
+
+.friend-avatar-img {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.friend-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.friend-name {
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-desc {
+    font-size: 13px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .siderNav-menu-item{
@@ -2550,6 +2624,7 @@ h6 {
 
 .siderNav-sub-menu{
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
 }
 .siderNav-sub-menu li a{
@@ -2632,13 +2707,13 @@ h6 {
 }
 
 
-@media (max-width: 992px) {
-    .meapost .block-friend {
-        padding-left: 80px;
-        width: 100%;
-        display: inline-block;
+@media (max-width: 768px) {
+    .friend-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
     }
-    .meapost .block-friend:nth-child(even) {
-        margin-left: 0;
+    .friend-card-link {
+        padding: 14px;
+        gap: 12px;
     }
 }

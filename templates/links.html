@@ -12,20 +12,29 @@
           <div class="post_loop_info">
           </div>
         </div>
+
+        <div class="friend-list">
           <th:block th:each="group : ${groups}" th:if="${not #lists.isEmpty(group.links)}">
-          <article class="meapost">
-          <h2 th:if="${#lists.size(groups) > 1}" th:text="${group.spec.displayName}"></h2>
-          </article>
-          <article class="meapost">
-            <blockquote class="block-extra block-friend" th:each="link : ${group.links}">
-              <a rel="noopener" target="_blank" th:href="@{${link.spec.url}}" >
-              <p  th:text="${link.spec.displayName}"></p>
-              <p style="font-size: 13px;" th:text="${link.spec.description}"></p>
-            
-            </a>
-            </blockquote>
-          </article>
-        </th:block>
+            <h2 class="friend-group-title" th:if="${#lists.size(groups) > 1}" th:text="${group.spec.displayName}"></h2>
+            <ul class="friend-grid">
+              <li class="friend-card" th:each="link : ${group.links}">
+                <a class="friend-card-link" rel="noopener" target="_blank" th:href="@{${link.spec.url}}"
+                  th:title="${link.spec.description}">
+                  <span class="friend-avatar">
+                    <span class="friend-avatar-letter"
+                      th:text="${#strings.substring(#strings.defaultString(link.spec.displayName, '?'), 0, 1)}"></span>
+                    <img class="friend-avatar-img" alt="" loading="lazy">
+                  </span>
+                  <span class="friend-meta">
+                    <span class="friend-name" th:text="${link.spec.displayName}"></span>
+                    <span class="friend-desc" th:text="${link.spec.description}"></span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </th:block>
+        </div>
+
         <div class="post_tag">
         </div>
       </div>
@@ -34,17 +43,51 @@
           group="content.halo.run"
           kind="Post"
           name="友链"
-        />  
+        />
       </div>
     </div>
 
-
   </section>
 
-  <script th:inline="javascript">
-    /* 在这里编写 JavaScript 代码 */
-    var myData = [[ ${groups} ]]
-    console.log(myData); // 示例：将后端数据输出到控制台
+  <script>
+    (function () {
+      /* 友链头像：优先加载站点 favicon（站内 /favicon.ico → favicon.im 代理），
+         两次都加载失败则移除图片，露出名字首字兜底 */
+      var FAVICON_CDN = 'https://favicon.im/';
+      var imgs = document.querySelectorAll('.friend-avatar-img');
+      Array.prototype.forEach.call(imgs, function (img) {
+        var card = img.closest('.friend-card');
+        if (!card) {
+          img.remove();
+          return;
+        }
+        var link = card.querySelector('.friend-card-link');
+        var origin, host;
+        try {
+          var url = new URL(link.getAttribute('href'), window.location.href);
+          origin = url.origin;
+          host = url.hostname;
+        } catch (e) { /* 无效链接，走首字兜底 */ }
+        if (!origin || !host) {
+          img.remove();
+          return;
+        }
+        var sources = [origin + '/favicon.ico', FAVICON_CDN + host];
+        var index = 0;
+        img.addEventListener('load', function () {
+          card.classList.add('has-favicon');
+        });
+        img.addEventListener('error', function () {
+          index++;
+          if (index < sources.length) {
+            img.src = sources[index];
+          } else {
+            img.remove();
+          }
+        });
+        img.src = sources[0];
+      });
+    })();
   </script>
 </th:block>
 </html>

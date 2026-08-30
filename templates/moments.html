@@ -13,15 +13,14 @@
           </div>
           <div class="post_loop">
             <th:block th:each="moment : ${moments.items}">
-              <div class="post_list post_list_shuoshuo">
-                <div class="post-date">
-                    <span class="post-date-day" th:text="${#temporals.format(moment.spec.releaseTime, 'dd')}"></span><span class="post-date-month" th:text="${#temporals.format(moment.spec.releaseTime, 'MMMM', new java.util.Locale('en'))}"></span>
-                </div>
-                <div style="box-shadow: 0px 0px 15px rgb(199 199 199 / 65%) inset;padding: 2rem 2rem 1rem 2rem;" th:utext="${moment.spec.content?.html}"></div>
-                <div class="post_loop_info">
-                  <span th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm a', new java.util.Locale('en'))}"></span>
-                </div>
+            <div class="post_list post_list_shuoshuo">
+              <div class="post-date">
+                <span class="post-date-day" th:text="${#temporals.format(moment.spec.releaseTime, 'dd')}"></span>
+                <span class="post-date-month" th:text="${#temporals.format(moment.spec.releaseTime, 'MMM', new java.util.Locale('en'))}"></span>
+                <span class="post-date-year" th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy')}"></span>
               </div>
+              <div class="moment-content post-markdown-style" th:utext="${moment.spec.content?.html}"></div>
+            </div>
             </th:block>
           </div>
           <th:block th:if="${theme.config?.styles?.need_ajax_scroll}">

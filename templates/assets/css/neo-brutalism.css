@@ -630,25 +630,126 @@ a {
 
 /* -------------------------------------------------------------------------
    9. 说说（moments）时间线
+   粗野时间线：黄色日期徽章骑在墨色竖线上，右侧为硬边框内容卡片。
    ------------------------------------------------------------------------- */
+.post_list_shuoshuo {
+    position: relative;
+    padding-left: 9.5rem;
+    margin-bottom: 0;
+    padding-bottom: 44px;
+    /* 最外层不做入场堆叠动画（21.1 会对 .post_list 施加），保持时间线静态出现 */
+    animation: none !important;
+}
+
+/* 时间线竖线 */
+.post_list_shuoshuo:before {
+    content: "";
+    position: absolute;
+    left: 4.5rem;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    display: block;
+    background: var(--neo-ink);
+    opacity: 0.16;
+}
+
+.post_list_shuoshuo:last-of-type:before {
+    height: 0;
+}
+
+/* 日期徽章：骑在时间线上 */
+.post-date {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 9rem;
+    text-align: center;
+    padding: 10px 4px;
+    background: var(--neo-yellow);
+    border: 3px solid var(--neo-ink);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    z-index: 1;
+    font-family: var(--neo-font);
+}
+
 .post-date-day {
-    color: var(--neo-accent);
+    color: var(--neo-ink);
+    font-size: 3rem;
+    line-height: 1;
+    display: block;
     font-weight: 900;
+    font-family: var(--neo-font);
 }
 
 .post-date-month {
     color: var(--neo-ink);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    display: block;
     font-weight: 800;
+    font-family: var(--neo-font);
 }
 
+.post-date-year {
+    color: var(--neo-ink);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    display: block;
+    font-weight: 800;
+    opacity: 0.7;
+    font-family: var(--neo-font);
+}
+
+/* 旧的小圆点节点不再需要 */
 .post-date:after {
-    background: var(--neo-ink);
-    border-radius: 0;
+    display: none;
 }
 
-.post_list_shuoshuo:before {
-    background: var(--neo-ink);
-    opacity: 0.15;
+/* 时刻内容卡片 */
+.post_list_shuoshuo .moment-content {
+    background: var(--neo-card-bg);
+    border: var(--neo-border-thin);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 24px 28px;
+    font-size: 16px;
+    line-height: 1.8;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.post_list_shuoshuo .moment-content p {
+    color: var(--neo-ink);
+}
+
+/* 时刻内图片：上下留白居中（边框由 post-markdown-style 提供） */
+.post_list_shuoshuo .moment-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 14px auto;
+}
+
+/* 时间线项整体静态：取消 .post_list 的悬停/按压上浮，也不做任何内容动画 */
+.post_list_shuoshuo:hover,
+.post_list_shuoshuo:active {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 平板 / 移动端：收起时间线与徽章，退化为纯卡片列表 */
+@media (max-width: 992px) {
+    .post_list_shuoshuo {
+        padding-left: 0;
+    }
+
+    .post_list_shuoshuo:before {
+        display: none;
+    }
+
+    .post_list_shuoshuo .moment-content {
+        padding: 18px 16px;
+    }
 }
 
 /* -------------------------------------------------------------------------
@@ -1077,21 +1178,64 @@ a {
 }
 
 /* -------------------------------------------------------------------------
-   14. 友链（block-friend / block-down）
+   14. 友链卡片（links.html）
    ------------------------------------------------------------------------- */
-.meapost .block-friend {
-    border: 2px solid var(--neo-ink);
-    box-shadow: var(--neo-shadow-sm);
+.friend-group-title {
+    color: var(--neo-ink);
+    border-left: 4px solid var(--neo-accent);
+}
+
+.friend-card {
     background: var(--neo-card-bg);
-    color: var(--neo-ink);
+    border: var(--neo-border-thin);
+    box-shadow: var(--neo-shadow-sm);
     border-radius: 0;
-    padding: 20px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.meapost .block-friend p {
+.friend-card-link {
     color: var(--neo-ink);
 }
 
+.friend-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 0 var(--neo-ink);
+}
+
+.friend-card:active {
+    transform: translateY(1px);
+    box-shadow: 2px 2px 0 0 var(--neo-ink);
+}
+
+.friend-card:hover .friend-name {
+    color: var(--neo-accent);
+}
+
+.friend-avatar {
+    background: var(--neo-paper-2);
+    border: 2px solid var(--neo-ink);
+    border-radius: 0;
+}
+
+.friend-avatar-letter {
+    background: var(--neo-yellow);
+    color: #000000;
+}
+
+.friend-name {
+    color: var(--neo-ink);
+}
+
+.friend-desc {
+    color: var(--neo-text-light);
+}
+
+.dark .friend-desc {
+    color: #b0b0b0;
+}
+
+/* 文章内短代码的附图样式（block-extra / block-book 等） */
 .meapost .block-extra img,
 .meapost .block-book img {
     border: 3px solid var(--neo-ink);
@@ -1492,6 +1636,7 @@ a {
     .post_list,
     .widget,
     .sider-collapse-item,
+    .friend-card,
     .post_tag a,
     .post_list .post_loop_info span,
     .post_list .post_loop_more a,
@@ -1501,10 +1646,50 @@ a {
     .page-navigator li a,
     .posts-nav .page-numbers,
     .sider-tabs .nav-link,
-    .scrollToTopBtn {
+    .scrollToTopBtn,
+    .sider-collapse-title,
+    .siderNav-menu-item,
+    .siderNav-sub-menu li a,
+    .widget_nav_menu .menu li a {
         animation: none !important;
         transition: none !important;
     }
+}
+
+/* -------------------------------------------------------------------------
+   21.8 侧边栏菜单项 —— 入场堆叠 + 悬停/按压触感
+   展开侧边栏时菜单卡片依次抽出（与 21.1 一致）；子菜单/分类标签悬停上浮、点击下压。
+   ------------------------------------------------------------------------- */
+.sidebar_box.anim-in .sider-collapse-item {
+    animation: neo-stack-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+.sidebar_box.anim-in .sider-collapse-item:nth-child(1) { animation-delay: 0.05s; }
+.sidebar_box.anim-in .sider-collapse-item:nth-child(2) { animation-delay: 0.10s; }
+.sidebar_box.anim-in .sider-collapse-item:nth-child(3) { animation-delay: 0.15s; }
+.sidebar_box.anim-in .sider-collapse-item:nth-child(4) { animation-delay: 0.20s; }
+.sidebar_box.anim-in .sider-collapse-item:nth-child(5) { animation-delay: 0.25s; }
+.sidebar_box.anim-in .sider-collapse-item:nth-child(6) { animation-delay: 0.30s; }
+
+.sider-collapse-title,
+.siderNav-menu-item {
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.siderNav-sub-menu li a,
+.widget_nav_menu .menu li a {
+    transition: transform 0.1s ease, box-shadow 0.1s ease,
+        background-color 0.15s ease, color 0.15s ease;
+}
+.siderNav-sub-menu li a:hover,
+.widget_nav_menu .menu li a:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+}
+.siderNav-sub-menu li a:active,
+.widget_nav_menu .menu li a:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 2px 2px 0 0 var(--neo-ink);
+    transition-duration: 0.05s;
 }
 
 /* -------------------------------------------------------------------------

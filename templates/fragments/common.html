@@ -4,18 +4,18 @@
       <th:block th:each="menuItem : ${menuItems}">
         <li class="menu-item" th:if="${menuItem.children.size() == 0}">
           <a  th:href="@{${menuItem.status.href}}"
-          th:text="${menuItem.displayName}"
+          th:text="${menuItem.status.displayName}"
           ></a>
         </li>
         <!-- 二级菜单 -->
         <li class="menu-item menu-item-has-children" th:if="${menuItem.children.size() > 0}">
           <a href="javascript:;"
-            th:text="${menuItem.displayName}"
+            th:text="${menuItem.status.displayName}"
             ></a>
           <ul class="sub-menu">
             <li th:each="item : ${menuItem.children}">
-              <a th:href="@{${item.spec.href}}"
-              th:text="${item.spec.displayName}"></a>
+              <a th:href="@{${item.status.href}}"
+              th:text="${item.status.displayName}"></a>
             </li>
           </ul>
         </li>
@@ -54,7 +54,7 @@
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="sider-archive-tab" data-bs-toggle="tab"
               data-bs-target="#sider-archive-panel" type="button" role="tab"
-              aria-controls="sider-archive-panel" aria-selected="false">归档</button>
+              aria-controls="sider-archive-panel" aria-selected="false">分类标签</button>
           </li>
         </ul>
         <div class="tab-content sider-tab-content">
@@ -73,8 +73,8 @@
                   <ul class="siderNav-sub-menu" th:with="items = ${menuItem.children}">
                     <li th:each="item : ${items}">
                       <a class="menu-item"
-                        th:href="@{${item.spec.href}}"
-                        th:text="${item.spec.displayName}"
+                        th:href="@{${item.status.href}}"
+                        th:text="${item.status.displayName}"
                       ></a>
                       </li>
                   </ul>

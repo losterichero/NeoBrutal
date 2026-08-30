@@ -162,5 +162,30 @@ $(function () {
   });
 });
 
+// 桌面下拉菜单：子菜单超出视口右缘时改为右对齐，避免被裁掉/错位
+$(function () {
+  $(document).on('mouseenter', '.header-menu .menu-item-has-children', function () {
+    var $sub = $(this).children('.sub-menu');
+    if (!$sub.length) return;
+    var rect = $sub[0].getBoundingClientRect();
+    if (rect.right > window.innerWidth - 8) {
+      $sub.css({ left: 'auto', right: '0' });
+    } else {
+      $sub.css({ left: '', right: '' });
+    }
+  });
+});
+
+// 侧边栏展开/收起时给菜单项加/减入场动画（配合 neo-brutalism.css 21.8 的堆叠抽出）
+$(function () {
+  var $canvas = $('#right-canvas');
+  $canvas.on('shown.bs.offcanvas', function () {
+    $(this).find('.sidebar_box').addClass('anim-in');
+  });
+  $canvas.on('hidden.bs.offcanvas', function () {
+    $(this).find('.sidebar_box').removeClass('anim-in');
+  });
+});
+
 
 
