@@ -76,23 +76,23 @@ spec:
               label: 开启
             - value: false
               label: 关闭
-        - $formkit: repeater
-          name: banners
-          label: 轮播图设置
-          value: [ ]
-          children:
-            - $formkit: text
-              name: title
-              label: 标题
-              placeholder: 请输入标题
-            - $formkit: text
-              name: subtitle
-              label: 副标题
-              placeholder: 请输入副标题
-            - $formkit: text
-              name: link
-              label: 链接
-              placeholder: 请输入跳转链接
+        # - $formkit: repeater
+        #   name: banners
+        #   label: 轮播图设置
+        #   value: [ ]
+        #   children:
+        #     - $formkit: text
+        #       name: title
+        #       label: 标题
+        #       placeholder: 请输入标题
+        #     - $formkit: text
+        #       name: subtitle
+        #       label: 副标题
+        #       placeholder: 请输入副标题
+        #     - $formkit: text
+        #       name: link
+        #       label: 链接
+        #       placeholder: 请输入跳转链接
     - group: layout
       label: 布局
       formSchema:
@@ -100,7 +100,7 @@ spec:
           name: post_columns
           label: 文章卡片布局
           value: "full"
-          help: "全占满：PC/平板每行一张大卡片，封面图在左、文字在右；每行两个：PC/平板每行两张卡片，封面图在上、文字在下。移动端始终单列、上下结构。"
+          help: ""
           options:
             - value: "full"
               label: 全占满

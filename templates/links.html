@@ -13,6 +13,14 @@
           </div>
         </div>
 
+        <!-- 友链提交入口：仅当安装并启用 plugin-link-submit 时显示 -->
+        <div class="friend-submit" th:if="${pluginFinder.available('link-submit')}">
+          <a class="friend-submit-btn" href="javascript:LinkSubmitWidget.open()" title="提交友链">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>提交友链
+          </a>
+          <span class="friend-submit-tip">想和我交换友链？点击提交申请，审核通过后就会展示在下方。</span>
+        </div>
+
         <div class="friend-list">
           <th:block th:each="group : ${groups}" th:if="${not #lists.isEmpty(group.links)}">
             <h2 class="friend-group-title" th:if="${#lists.size(groups) > 1}" th:text="${group.spec.displayName}"></h2>

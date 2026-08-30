@@ -631,6 +631,7 @@ a {
 /* -------------------------------------------------------------------------
    9. 说说（moments）时间线
    粗野时间线：黄色日期徽章骑在墨色竖线上，右侧为硬边框内容卡片。
+   移动端收起左侧大徽章，改为卡片上方紧凑的日期标签（见本段媒体查询）。
    ------------------------------------------------------------------------- */
 .post_list_shuoshuo {
     position: relative;
@@ -730,6 +731,43 @@ a {
     margin: 14px auto;
 }
 
+/* 时刻媒体（content.medium：PHOTO / VIDEO / AUDIO） */
+/* 图片：缩小居中展示，不铺满卡片 */
+.moment-content .moment-media img {
+    display: block;
+    width: auto;
+    max-width: 40%;
+    height: auto;
+    border: 3px solid var(--neo-ink);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 0 var(--neo-ink);
+    margin:  18px;
+}
+
+/* 视频：铺满卡片宽度 */
+.moment-content .moment-media video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 3px solid var(--neo-ink);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 0 var(--neo-ink);
+    margin: 0 0 18px;
+}
+
+.moment-content .moment-media audio {
+    display: block;
+    width: 100%;
+    border: 2px solid var(--neo-ink);
+    background: var(--neo-paper-2);
+    margin: 0 0 18px;
+}
+
+.moment-content .moment-media > :last-child {
+    margin-bottom: 0;
+}
+
 /* 时间线项整体静态：取消 .post_list 的悬停/按压上浮，也不做任何内容动画 */
 .post_list_shuoshuo:hover,
 .post_list_shuoshuo:active {
@@ -737,7 +775,8 @@ a {
     box-shadow: none;
 }
 
-/* 平板 / 移动端：收起时间线与徽章，退化为纯卡片列表 */
+/* 平板 / 移动端：收起时间线竖线与左侧大徽章，退化为纯卡片列表；
+   日期改为卡片上方紧凑的黄色小标签（30 Aug 2026）继续展示 */
 @media (max-width: 992px) {
     .post_list_shuoshuo {
         padding-left: 0;
@@ -745,6 +784,32 @@ a {
 
     .post_list_shuoshuo:before {
         display: none;
+    }
+
+    .post-date {
+        position: static;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        width: auto;
+        padding: 4px 12px;
+        margin: 0 0 12px;
+        text-align: center;
+        background: var(--neo-yellow);
+        border: 2px solid var(--neo-ink);
+        box-shadow: 3px 3px 0 0 var(--neo-ink);
+    }
+    .post-date-day,
+    .post-date-month,
+    .post-date-year {
+        display: inline;
+        font-size: 0.85rem;
+        line-height: 1.2;
+        font-weight: 800;
+        opacity: 1;
+    }
+    .post-date-year {
+        opacity: 0.75;
     }
 
     .post_list_shuoshuo .moment-content {
@@ -1235,6 +1300,66 @@ a {
     color: #b0b0b0;
 }
 
+/* 友链提交入口（plugin-link-submit，links.html） */
+.friend-submit {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 6px 4px 18px;
+}
+
+.friend-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    font-weight: 800;
+    font-size: 1rem;
+    line-height: 1.2;
+    color: var(--neo-ink);
+    background: var(--neo-yellow);
+    border: var(--neo-border-thin);
+    border-radius: 0;
+    box-shadow: 5px 5px 0 0 var(--neo-ink);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
+}
+
+.friend-submit-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 0 var(--neo-ink);
+    background: var(--neo-primary-light);
+}
+
+.friend-submit-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 0 var(--neo-ink);
+}
+
+.friend-submit-tip {
+    font-size: 0.9rem;
+    color: var(--neo-text-light);
+}
+
+/* 提交弹框（插件注入）：通过 CSS 变量与主题融合（见插件文档"自定义提交弹框样式"） */
+:root {
+    --link-submit-widget-base-font-size: 1rem;
+    --link-submit-widget-base-font-family: var(--neo-font);
+    --link-submit-widget-base-rounded: 0;
+    --link-submit-widget-base-bg-color: var(--neo-card-bg);
+    --link-submit-widget-modal-layer-color: rgba(10, 10, 10, 0.55);
+    --link-submit-widget-form-bg-color: var(--neo-card-bg);
+    --link-submit-widget-form-border-color: var(--neo-ink);
+    --link-submit-widget-form-text-color: var(--neo-ink);
+    --link-submit-widget-form-label-color: var(--neo-ink);
+    --link-submit-widget-form-placeholder-color: var(--neo-text-light);
+    --link-submit-widget-form-button-bg-color: var(--neo-yellow);
+    --link-submit-widget-form-button-text-color: var(--neo-ink);
+    --link-submit-widget-form-button-hover-bg-color: var(--neo-primary-light);
+}
+
 /* 文章内短代码的附图样式（block-extra / block-book 等） */
 .meapost .block-extra img,
 .meapost .block-book img {
@@ -1650,7 +1775,10 @@ a {
     .sider-collapse-title,
     .siderNav-menu-item,
     .siderNav-sub-menu li a,
-    .widget_nav_menu .menu li a {
+    .widget_nav_menu .menu li a,
+    .header-menu .header-menu-ul li:hover > .sub-menu,
+    .header-menu .header-menu-ul li .sub-menu li,
+    .friend-submit-btn {
         animation: none !important;
         transition: none !important;
     }
@@ -1693,11 +1821,63 @@ a {
 }
 
 /* -------------------------------------------------------------------------
+   21.9 顶部导航下拉菜单 —— 弹出动画
+   悬停时 .sub-menu 由 display:none 变 block，动画随重显从头播放：
+   整块淡入 + 从按钮下方落下（translateY -10px → 0，带轻微过冲）、阴影随显，
+   各子项再依次延迟错峰弹出（与 21.8 侧边栏一致）。
+   ------------------------------------------------------------------------- */
+@keyframes neo-dropdown-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.98);
+        box-shadow: 0 0 0 0 transparent;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: var(--neo-shadow-sm);
+    }
+}
+
+@keyframes neo-dropdown-item-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-menu .header-menu-ul li:hover > .sub-menu {
+    animation: neo-dropdown-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+.header-menu .header-menu-ul li:hover > .sub-menu li {
+    animation: neo-dropdown-item-in 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(1) { animation-delay: 0.03s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(2) { animation-delay: 0.06s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(3) { animation-delay: 0.09s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(4) { animation-delay: 0.12s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(5) { animation-delay: 0.15s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(6) { animation-delay: 0.18s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(7) { animation-delay: 0.21s; }
+.header-menu .header-menu-ul li:hover > .sub-menu li:nth-child(8) { animation-delay: 0.24s; }
+
+/* 子项悬停背景平滑（入场动画走 transform，与背景过渡互不冲突） */
+.header-menu .header-menu-ul li .sub-menu li {
+    transition: background-color 0.15s ease;
+}
+
+/* -------------------------------------------------------------------------
    22. 封面图 & 文章卡片布局
    布局配置（主题设置 → 布局）：
    - 全占满（默认）：PC/平板每行一张大卡片，封面图在左、文字在右（左右结构）
-   - 每行两个：      PC/平板网格两列，封面图在上、文字在下（上下结构）
-   - 移动端：        无论哪种布局，始终单列、上下结构
+   - 每行两个：      PC/平板瀑布流（CSS 多栏两列），封面图在上、文字在下；
+                     无封面卡片等高（见下方 .two-col 规则）
+   - 移动端：        无论哪种布局，始终单列、上下结构（瀑布流退化为列表）
    封面图元素为 .post_thumb（含图 .post_text 为文字区），
    仅当「封面图片」开启且文章设置了封面图时，卡片才带 .has-cover。
    ------------------------------------------------------------------------- */
@@ -1750,18 +1930,25 @@ a {
     display: none;
 }
 
-/* 每行两个（PC/平板）：网格两列 + 上下结构 */
+/* 每行两个（PC/平板）：瀑布流 —— 用 CSS 多栏实现
+   卡片按 DOM 顺序自上而下、逐栏填充（左栏先、右栏后），
+   每张卡片高度由内容自然决定（封面 16/9 + 文字），形成错落的瀑布效果。
+   注：CSS 多栏天然兼容 ajax 追加新卡片（自动流入当前最短的流末尾）。 */
 .post-loop .post_loop.two-col {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
-    align-items: stretch;
+    column-count: 2;
+    column-gap: 28px;
     margin-bottom: 28px;
 }
 
 .post-loop .post_loop.two-col .post_list {
-    margin-bottom: 0;
+    margin-bottom: 28px;
     padding: 24px 24px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+}
+
+.post-loop .post_loop.two-col .post_list:last-child {
+    margin-bottom: 0;
 }
 
 .post-loop .post_loop.two-col .post_list h2 {
@@ -1775,6 +1962,7 @@ a {
     overflow: hidden;
 }
 
+/* 有封面卡片：封面在上、文字在下（上下结构），高度随内容自然变化 */
 .post-loop .post_loop.two-col .post_list.has-cover {
     flex-direction: column;
     align-items: stretch;
@@ -1787,11 +1975,52 @@ a {
     aspect-ratio: 16 / 9;
 }
 
-/* 移动端：始终单列、上下结构 */
+/* 无封面卡片：等高 —— 整卡统一高度（320px），标题限两行、摘要限三行，
+   .post_text 撑满卡片、元信息贴底，避免瀑布流里纯文字卡高矮不一 */
+.post-loop .post_loop.two-col .post_list:not(.has-cover) {
+    display: flex;
+    flex-direction: column;
+    height: 320px;
+    overflow: hidden;
+}
+
+.post-loop .post_loop.two-col .post_list:not(.has-cover) .post_text {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-loop .post_loop.two-col .post_list:not(.has-cover) h2 {
+    margin: 0 0 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.post-loop .post_loop.two-col .post_list:not(.has-cover) .post_text p {
+    margin: 0 0 16px;
+}
+
+.post-loop .post_loop.two-col .post_list:not(.has-cover) .post_loop_info {
+    margin: auto 0 0;
+}
+
+/* 移动端：始终单列（瀑布流退化为普通列表）、上下结构 */
 @media (max-width: 768px) {
     .post-loop .post_loop.two-col {
-        grid-template-columns: 1fr;
-        gap: 24px;
+        column-count: 1;
+        column-gap: 0;
+    }
+
+    /* 单列时无错落可言，无封面卡片恢复自然高度，避免整屏大块留白 */
+    .post-loop .post_loop.two-col .post_list:not(.has-cover) {
+        height: auto;
+        overflow: visible;
+    }
+    .post-loop .post_loop.two-col .post_list:not(.has-cover) .post_loop_info {
+        margin: 0 0 30px;
     }
 
     .post_loop .post_list.has-cover {

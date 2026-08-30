@@ -1,12 +1,22 @@
+// 明暗主题切换图标：亮色显示月亮（点击切暗色），暗色显示太阳（点击切回亮色）
+function updateThemeIcons() {
+  var isDark = document.documentElement.classList.contains('dark');
+  $('.theme-switch i').each(function () {
+    $(this).toggleClass('bi-sun-fill', isDark).toggleClass('bi-moon-stars-fill', !isDark);
+  });
+}
+
 // 变黑函数
 function setDark() {
   localStorage.setItem("isDarkMode", "1");
   document.documentElement.classList.add("dark");
+  updateThemeIcons();
 }
 // 变白函数
 function removeDark() {
   localStorage.setItem("isDarkMode", "0");
   document.documentElement.classList.remove("dark");
+  updateThemeIcons();
 }
 // switch按钮
 function switchDarkMode() {
@@ -46,6 +56,7 @@ if(isDark==="1"){
 }else{
   document.documentElement.classList.remove('dark');
 }
+updateThemeIcons();
 
 // 返回顶部
 const scrollToTopBtn = document.querySelector(".scrollToTopBtn");

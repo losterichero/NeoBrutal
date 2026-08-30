@@ -19,7 +19,29 @@
                 <span class="post-date-month" th:text="${#temporals.format(moment.spec.releaseTime, 'MMM', new java.util.Locale('en'))}"></span>
                 <span class="post-date-year" th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy')}"></span>
               </div>
-              <div class="moment-content post-markdown-style" th:utext="${moment.spec.content?.html}"></div>
+              <div class="moment-content post-markdown-style">
+                <div th:if="${not #strings.isEmpty(moment.spec.content?.html)}" th:utext="${moment.spec.content?.html}"></div>
+                <div class="moment-media" th:if="${moment.spec.content?.medium != null and !moment.spec.content.medium.isEmpty()}">
+                  <th:block th:each="item : ${moment.spec.content.medium}">
+                    <img
+                      class="moment-media-item"
+                      th:if="${item.type.name == 'PHOTO'}"
+                      th:src="@{${item.url}}"
+                      th:alt="${moment.spec.content?.raw}"
+                      loading="lazy" />
+                    <video
+                      class="moment-media-item"
+                      th:if="${item.type.name == 'VIDEO'}"
+                      th:src="@{${item.url}}"
+                      controls preload="metadata"></video>
+                    <audio
+                      class="moment-media-item"
+                      th:if="${item.type.name == 'AUDIO'}"
+                      th:src="@{${item.url}}"
+                      controls></audio>
+                  </th:block>
+                </div>
+              </div>
             </div>
             </th:block>
           </div>
