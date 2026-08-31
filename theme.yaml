@@ -9,7 +9,8 @@ spec:
     website: https://dzbook.top
   description: '新粗野主义是一场对当下主流设计（比如苹果式的极简风、圆润的毛玻璃效果）的"叛逆"。它故意抛开那些"精致、优雅"的规则，用很直白、甚至有点"粗糙"的方式，来追求一种极致的真实感、强烈的视觉冲击和独特的个性。'
   logo: https://dzbook.top/upload/1111.png
-  website: https://dzbook.top
+  homepage: https://dzbook.top
+  issues: https://github.com/losterichero/NeoBrutal/issues
   repo: https://github.com/losterichero/NeoBrutal
   settingName: "theme-brevity-book-setting"
   configMapName: "theme-brevity-book-configmap"
