@@ -27,10 +27,10 @@
 
 ## 致谢
 
-本主题由 [Typecho-Theme-MeaWord](https://github.com/Meayair/Typecho-Theme-MeaWord) 项目 fork 而来，并由 [loster](https://dzbook.top) 移植、重构至 Halo 2。
+本主题由 [Typecho-Theme-MeaWord](https://github.com/Meayair/Typecho-Theme-MeaWord2019) 项目 fork 而来，并由 [loster](https://dzbook.top) 移植、重构至 Halo 2。
 
 感谢原作者 [Meayair](https://github.com/Meayair) 及 MeaWord 社区的设计与灵感。若你喜欢，请前往原项目为它点个 Star ⭐。
 
 ## 许可
 
-请遵循原项目 [Typecho-Theme-MeaWord](https://github.com/Meayair/Typecho-Theme-MeaWord) 的开源许可条款，并保留对原作者的致谢。
+请遵循原项目 [Typecho-Theme-MeaWord](https://github.com/Meayair/Typecho-Theme-MeaWord2019) 的开源许可条款，并保留对原作者的致谢。
