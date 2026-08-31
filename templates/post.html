@@ -16,13 +16,21 @@
             <h1 th:text="${post.spec?.title}"></h1>
             <div class="post_loop_info">
               <span class="author" itemprop="author" itemscope th:each="contributor : ${post?.contributors}">
-                <a th:text="${contributor?.displayName}"></a>
+                <i class="bi bi-person-fill" aria-hidden="true"></i><a th:text="${contributor?.displayName}"></a>
               </span>
-              <span th:text="${#temporals.format(post.spec?.publishTime, 'yyyy-MM-dd')}"></span>
+              <span><i class="bi bi-stopwatch" aria-hidden="true"></i><th:block th:text="${#temporals.format(post.spec?.publishTime, 'yyyy-MM-dd')}"></th:block></span>
+              <span><i class="bi bi-fonts" aria-hidden="true"></i><th:block th:text="${#strings.length(post.content?.content)}"></th:block></span>
+              <span><i class="bi bi-eye" aria-hidden="true"></i><th:block th:text="${post.stats?.visit}"></th:block></span>
             </div>
           </div>
-          <article class="post-markdown-style" th:utext="${post.content?.content}">
-          </article>
+          <div class="post-content-wrap">
+            <article class="post-markdown-style" th:utext="${post.content?.content}">
+            </article>
+            <nav class="post-toc" id="postToc" aria-label="文章目录">
+              <div class="post-toc-title">目录</div>
+              <ol class="post-toc-list"></ol>
+            </nav>
+          </div>
           <div class="post_tag">
             <div class="mt-4">
               <th:block th:each="tag : ${post.tags}">
@@ -48,7 +56,30 @@
         </div>
       </div>
     </section>
-   
+
+    <button type="button" class="post-toc-toggle" id="postTocToggle" aria-label="打开目录">
+      <span>目录</span>
+    </button>
+    <div class="post-toc-drawer" id="postTocDrawer" aria-hidden="true">
+      <div class="post-toc-drawer-head">
+        <span>目录</span>
+        <button type="button" class="post-toc-close" aria-label="关闭目录"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+      </div>
+      <ol class="post-toc-list"></ol>
+    </div>
+    <div class="post-toc-mask" id="postTocMask" hidden></div>
+
+    <div class="post-action-bar" id="postActionBar">
+      <button type="button" class="post-action post-like-btn" data-post-name="${post.metadata?.name}" data-upvote-url="@{/apis/api.halo.run/v1alpha1/trackers/upvote}" aria-label="点赞">
+        <i class="bi bi-hand-thumbs-up" aria-hidden="true"></i>
+        <b class="post-badge post-like-badge" th:text="${post.stats?.upvote}">0</b>
+      </button>
+      <span class="post-action-divider" aria-hidden="true"></span>
+      <button type="button" class="post-action post-comment-btn" aria-label="评论">
+        <i class="bi bi-chat-dots" aria-hidden="true"></i>
+        <b class="post-badge post-comment-badge" th:text="${post.stats?.comment}">0</b>
+      </button>
+    </div>
   </th:block>
  
 </html>

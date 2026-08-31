@@ -9,16 +9,14 @@
       <div class="container">
         <div class="post-box">
           <div id="tags" class="mod-archive-name">标签列表</div>
-            <ul class="mod-archive-list">
-              <th:block th:each="tag : ${tags}">
-                <li class="li-inline">
-                  <a th:href="@{${tag.status?.permalink}}" rel="tag">
-                    <th:block th:text="${tag.spec?.displayName}"></th:block>
-                    <span th:text="'(' + ${tag.postCount} +')'"></span>
-                  </a>
-              </li>
-              </th:block>
-            </ul>
+          <div class="post_loop tags-flow">
+            <th:block th:each="tag : ${tags}">
+            <a class="post_list tag-card" th:href="@{${tag.status?.permalink}}" th:title="${tag.spec?.displayName}">
+              <i class="bi bi-tags tag-watermark" aria-hidden="true"></i>
+              <span class="tag-name" th:text="${tag.spec?.displayName}">标签名</span>
+            </a>
+            </th:block>
+          </div>
         </div>
       </div>
     </section>

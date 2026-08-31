@@ -9,7 +9,8 @@
       <div class="container">
         <div class="post-box">
           <div class="post-box-txt">
-            <h3 class="latest_post" th:text="${category.spec?.displayName}"></h3>
+            <h3 class="latest_post"><span th:text="${category.spec?.displayName}">分类名称</span><span class="count-badge"><i class="bi bi-file-earmark-text" aria-hidden="true"></i>共<span th:text="${category.postCount}"></span>篇文章</span></h3>
+            <p class="category-desc" th:if="${not #strings.isEmpty(category.spec?.description)}" th:text="${category.spec?.description}"></p>
           </div>
           <div class="post_loop" th:classappend="${theme.config?.layout?.post_columns == 'two' ? 'two-col' : ''}">
             <th:block th:insert="~{fragments/posts :: post(${posts})}"></th:block>

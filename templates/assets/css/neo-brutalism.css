@@ -423,6 +423,35 @@ a {
     bottom: -10px;
 }
 
+/* 分类页（category.html）顶部描述：次级墨色，左对齐配合墨色标题 */
+.post-box .post-box-txt .category-desc {
+    color: var(--neo-text-light);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.8;
+    text-align: left;
+    margin-bottom: 0;
+}
+
+/* 文章数小卡片（紧随页面标题）：仿文章条里的 .post_loop_info 亮色小标签 */
+.count-badge {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+    background: var(--neo-yellow);
+    border: 1px solid var(--neo-ink);
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.6;
+    color: var(--neo-ink);
+    border-radius: 0;
+}
+
+.count-badge i {
+    margin-right: 4px;
+}
+
 /* -------------------------------------------------------------------------
    6. 文章列表项（卡片）
    ------------------------------------------------------------------------- */
@@ -626,6 +655,122 @@ a {
     padding-left: 8px;
     margin-right: -8px;
     color: var(--neo-ink);
+}
+
+/* -------------------------------------------------------------------------
+   8.1 分类页（categories.html）：分类以卡片块展示，整卡可点击进入分类。
+   PC 一排 5 个，移动端一排 2 个。
+   ------------------------------------------------------------------------- */
+.post_loop.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+@media (min-width: 768px) {
+    .post_loop.category-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.post-loop .post_loop.category-grid .post_list {
+    margin-bottom: 0;
+    padding: 22px 18px;
+}
+
+/* 整卡链接：铺满块级、去下划线、锚定水印。
+   悬停上浮/按压沿用 .post_list:hover 的既有动效。 */
+.post_loop.category-grid .post_list.category-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: var(--neo-ink);
+    text-decoration: none;
+}
+
+/* 有封面：封面在上、文字在下 */
+.post_loop.category-grid .post_list.has-cover {
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post_loop.category-grid .post_list.has-cover .post_thumb {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 16 / 9;
+}
+
+/* 右侧文章数目水印（不用 .post_beici，避免被 main.js 的 beiciAll() 覆盖为首字） */
+.post_loop.category-grid .category-count {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 3.5rem;
+    opacity: 0.14;
+    color: var(--neo-ink);
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.post_loop.category-grid .post_list .post_text {
+    flex: 1;
+}
+
+.post_loop.category-grid .post_list .post_text h2 {
+    font-size: 18px;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--neo-ink);
+    word-break: break-word;
+}
+
+/* 分类卡片内的文章数行（"共N篇文章"） */
+.post_loop.category-grid .post_list .category-count-line {
+    font-size: 0.85rem;
+    color: var(--neo-text-light);
+    font-weight: 500;
+    margin: 8px 0 0;
+}
+
+/* -------------------------------------------------------------------------
+   8.2 标签页（tags.html）：标签卡片一个接一个排列，不显示数量，
+   虚影位置改为 bi-tags 图标。
+   ------------------------------------------------------------------------- */
+.post_loop.tags-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.post-loop .post_loop.tags-flow .post_list.tag-card {
+    margin-bottom: 0;
+    padding: 16px 20px;
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    color: var(--neo-ink);
+    text-decoration: none;
+}
+
+.tags-flow .post_list.tag-card .tag-name {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+/* 标签水印：虚影位置显示 bi-tags 图标 */
+.tags-flow .post_list.tag-card .tag-watermark {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 1.5rem;
+    opacity: 0.25;
+    color: var(--neo-ink);
+    pointer-events: none;
 }
 
 /* -------------------------------------------------------------------------
@@ -1485,6 +1630,12 @@ a {
     color: var(--neo-yellow);
 }
 
+/* 深色模式下主题切换的「太阳」图标用白色（红底上更醒目） */
+.dark .head_top .top_icon .top_icon_btn i.bi-sun-fill,
+.dark .right-slide-header button i.bi-sun-fill {
+    color: #ffffff;
+}
+
 /* -------------------------------------------------------------------------
    19. 亮色底元素上的文字始终为黑色（保证高对比度，亮色/深色模式通用）
    ------------------------------------------------------------------------- */
@@ -1683,7 +1834,7 @@ a {
    21.5 链接 —— 粗野划线
    悬停时从左侧展开一条 3px 手工划线（overshoot 曲线），替代原有的背景高亮。
    ------------------------------------------------------------------------- */
-.post_list h2 a,
+.post_text_link h2,
 .post-next a,
 .post-prev a,
 .mod-archive-list li a,
@@ -1691,7 +1842,7 @@ a {
     position: relative;
 }
 
-.post_list h2 a::after,
+.post_text_link h2::after,
 .post-next a::after,
 .post-prev a::after,
 .mod-archive-list li a::after,
@@ -1706,7 +1857,7 @@ a {
     transition: width 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.post_list h2 a:hover::after,
+.post_text_link:hover h2::after,
 .post-next a:hover::after,
 .post-prev a:hover::after,
 .mod-archive-list li a:hover::after,
@@ -1715,7 +1866,7 @@ a {
 }
 
 /* 移除旧的高亮式悬停，改由下划线承担 */
-.post_list h2 a:hover {
+.post_text_link:hover {
     background: none;
     box-shadow: none;
     padding: 0;
@@ -2034,5 +2185,279 @@ a {
         width: 100%;
         max-width: none;
         aspect-ratio: 16 / 9;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   12.4 文章卡片：标题 + 摘要整块可点击（进入详情）
+   ------------------------------------------------------------------------- */
+.post_text_link {
+    display: block;
+    color: var(--neo-ink);
+    text-decoration: none;
+}
+.post_text_link h2,
+.post_text_link p {
+    color: var(--neo-ink);
+}
+
+/* 详情页元信息小卡片里的图标 */
+.post_list .post_loop_info span i {
+    margin-right: 4px;
+    font-style: normal;
+}
+
+/* -------------------------------------------------------------------------
+   12.5 文章详情页：正文收窄 + 右侧目录（PC 嵌右、移动端抽屉）
+   ------------------------------------------------------------------------- */
+.post-content-wrap {
+    display: block;
+}
+
+/* PC 目录：固定定位，嵌在文章块右侧、向文章主体外的空白区域延伸（JS 按 .post-box 右缘定位） */
+.post-toc {
+    position: fixed;
+    top: 88px;
+    left: 0;
+    width: 240px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: var(--neo-yellow);
+    border: 1px solid var(--neo-ink);
+    box-shadow: 4px 4px 0 0 var(--neo-ink);
+    padding: 14px 14px 16px;
+    font-size: 13px;
+    color: var(--neo-ink);
+    visibility: hidden;
+    z-index: 60;
+}
+.post-toc-title {
+    font-size: 14px;
+    font-weight: 900;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--neo-ink);
+}
+.post-toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.post-toc-list ol {
+    list-style: none;
+    margin: 0;
+    padding-left: 12px;
+}
+.post-toc-list li {
+    line-height: 1.7;
+}
+.post-toc-list a {
+    display: block;
+    color: var(--neo-ink);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1px 0;
+}
+.post-toc-list a:hover,
+.post-toc-list a.is-active {
+    background: var(--neo-ink);
+    color: var(--neo-card-bg);
+}
+
+/* 目录 / 点赞条入场动画：轻微上浮 + 缩放（JS 在显示时加 .anim-in 触发，overshoot 弹一下） */
+@keyframes neo-float-in {
+    0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.post-toc.anim-in,
+.post-action-bar.anim-in {
+    animation: neo-float-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+/* 移动端：右侧「目录」小方块 + 滑出抽屉 */
+.post-toc-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: none;
+    background: var(--neo-yellow);
+    border: 2px solid var(--neo-ink);
+    border-right: none;
+    box-shadow: 3px 3px 0 0 var(--neo-ink);
+    padding: 12px 8px;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--neo-ink);
+    cursor: pointer;
+    line-height: 1;
+}
+.post-toc-toggle:hover {
+    background: var(--neo-ink);
+    color: var(--neo-card-bg);
+}
+.post-toc-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 82vw;
+    z-index: 200;
+    background: var(--neo-card-bg);
+    border-left: 3px solid var(--neo-ink);
+    box-shadow: -8px 0 0 0 var(--neo-ink);
+    transform: translateX(105%);
+    transition: transform 0.25s ease;
+    padding: 18px 16px;
+    overflow-y: auto;
+}
+.post-toc-drawer.open {
+    transform: translateX(0);
+}
+.post-toc-drawer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    font-size: 16px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--neo-ink);
+}
+.post-toc-close {
+    width: 28px;
+    height: 28px;
+    background: var(--neo-yellow);
+    border: 2px solid var(--neo-ink);
+    box-shadow: 2px 2px 0 0 var(--neo-ink);
+    color: var(--neo-ink);
+    line-height: 1;
+    cursor: pointer;
+}
+.post-toc-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(10, 10, 10, 0.35);
+}
+
+@media (max-width: 1199px) {
+    .post-toc {
+        display: none;
+    }
+    .post-toc-toggle {
+        display: block;
+    }
+}
+
+/* 详情页左下角：点赞 / 评论 —— 竖排图标条，两个按钮是一个整体，中间一条小横线。
+   阴影与返回顶部按钮一致；入场动画由 JS 加 .anim-in 触发（PC 端先定位再显示，避免闪跳）。 */
+.post-action-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 16px;
+    top: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    background: var(--neo-yellow);
+    border: 3px solid var(--neo-ink);
+    box-shadow: var(--neo-shadow-sm);
+    padding: 5px;
+}
+/* PC 端：默认隐藏，JS 贴到文章块左缘后再显示 */
+@media (min-width: 1200px) {
+    .post-action-bar {
+        visibility: hidden;
+    }
+}
+.post-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;   /* 计数徽标以按钮右上角为基准定位 */
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 2px solid transparent;   /* 同导航栏：悬停墨底不贴住边框/分隔线 */
+    border-radius: 0;
+    color: var(--neo-ink);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.post-action i {
+    font-size: 24px;
+}
+/* 点赞/评论计数徽标：按钮右上角白色方形（两种主题下都用白底黑字） */
+.post-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 3px;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #0A0A0A;
+    border: 2px solid #0A0A0A;
+    border-radius: 0;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 13px;
+    text-align: center;
+}
+/* 悬停反色与顶部导航栏一致：墨底 + 主色图标 */
+.post-action:hover {
+    background: var(--neo-ink);
+    color: var(--neo-yellow);
+}
+.dark .post-action:hover {
+    background: #000000;   /* 同导航栏深色模式的悬停底 */
+    color: var(--neo-yellow);
+}
+.post-action:active {
+    transform: translate(3px, 3px);
+}
+.post-action-divider {
+    width: 60%;
+    height: 2px;
+    margin: 4px auto;
+    background: var(--neo-ink);
+    flex: none;
+}
+.post-like-btn.liked i {
+    color: var(--neo-ink);
+}
+/* 已赞后的点赞钮悬停也要像评论按钮一样变主色 */
+.post-action:hover i {
+    color: var(--neo-yellow);
+}
+
+/* 移动端：点赞/评论贴屏幕左缘 */
+@media (max-width: 768px) {
+    .post-action-bar {
+        top: auto;
+        bottom: 0;
+        left: 0;
+    }
+    .post-action {
+        width: 40px;
+        height: 40px;
+    }
+    .post-action i {
+        font-size: 21px;
     }
 }

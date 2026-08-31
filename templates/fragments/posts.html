@@ -55,15 +55,12 @@
     </div>
     </th:block>
     <div class="post_text">
-      <h2 class="hover-target">
-        <a
-          th:href="@{${post.status?.permalink}}"
-          th:title="${post.spec.title}"
-          th:text="${post.spec.title}"
-          >
-        </a>
-      </h2>
-      <p style="position:relative" th:text="${post.status?.excerpt}"></p>
+      <a class="post_text_link"
+         th:href="@{${post.status?.permalink}}"
+         th:title="${post.spec.title}">
+        <h2 class="hover-target" th:text="${post.spec.title}"></h2>
+        <p style="position:relative" th:text="${post.status?.excerpt}"></p>
+      </a>
       <div class="post_loop_info">
         <th:block th:each="contributor : ${post?.contributors}">
         <span>

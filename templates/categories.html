@@ -8,17 +8,28 @@
     <section class="post-loop">
       <div class="container">
         <div class="post-box">
-          <div id="categories" class="mod-archive-name">分类列表</div>
-            <ul class="mod-archive-list">
-              <th:block th:each="category : ${categories}">
-                <li>
-                  <a th:href="@{${category.status?.permalink}}" rel="tag">
-                    <th:block th:text="${category.spec?.displayName}"></th:block>
-                    <span th:text="'(' + ${category.postCount} +')'"></span>
-                  </a>
-              </li>
+          <div id="categories" class="mod-archive-name">分类列表<span class="count-badge"><i class="bi bi-file-earmark-text" aria-hidden="true"></i>共<span th:text="${siteStatsFinder.getStats().post}"></span>篇文章</span></div>
+
+          <div class="post_loop category-grid">
+            <th:block th:each="category : ${categories}">
+            <a class="post_list category_list category-card"
+               th:with="showCover=${not #strings.isEmpty(category.spec?.cover)}"
+               th:classappend="${showCover ? 'has-cover' : ''}"
+               th:href="@{${category.status?.permalink}}"
+               th:title="${category.spec?.displayName}">
+              <div class="category-count" th:text="${category.postCount}"></div>
+              <th:block th:if="${showCover}">
+              <div class="post_thumb">
+                <img th:src="@{${category.spec?.cover}}" th:alt="${category.spec?.displayName}" loading="lazy" />
+              </div>
               </th:block>
-            </ul>
+              <div class="post_text">
+                <h2 class="hover-target" th:text="${category.spec?.displayName}">分类名称</h2>
+             
+              </div>
+            </a>
+            </th:block>
+          </div>
         </div>
       </div>
     </section>
