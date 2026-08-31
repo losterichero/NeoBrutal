@@ -13,5 +13,5 @@ spec:
   repo: https://github.com/losterichero/NeoBrutal
   settingName: "theme-brevity-book-setting"
   configMapName: "theme-brevity-book-configmap"
-  version: "2.5"
-  requires: ">=2.19"
+  version: "1.0.0"
+  requires: ">=2.25"
