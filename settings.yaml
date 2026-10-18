@@ -7,6 +7,16 @@ spec:
     - group: base_info
       label: 基本信息
       formSchema:
+        - $formkit: radio
+          name: show_info_bar
+          label: 首页信息条
+          value: true
+          help: "控制首页顶部信息条（作者信息、媒体账号、运行时间、文章数量/浏览量）的显示。"
+          options:
+            - value: true
+              label: 显示
+            - value: false
+              label: 关闭
         - $formkit: text
           name: display_user
           label: 首页显示用户

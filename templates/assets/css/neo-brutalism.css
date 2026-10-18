@@ -577,6 +577,18 @@ a {
     border: 2px solid var(--neo-ink);
 }
 
+.top-section-left .display_user .avatar-fallback {
+    border-radius: 0;
+    border: 2px solid var(--neo-ink);
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
+.dark .top-section-left .display_user .avatar-fallback {
+    background: var(--neo-yellow);
+    color: var(--neo-ink);
+}
+
 .media-accounts .account {
     border-radius: 0;
     border: 2px solid var(--neo-ink);

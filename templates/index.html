@@ -40,32 +40,45 @@
 
         <div class="post-box">
 
-          <div class="top-section">
+          <div class="top-section" th:if="${theme.config?.base_info?.show_info_bar != false and theme.config?.base_info?.show_info_bar != 'false'}">
            <!-- <div class="top-section-title">关于</div> -->
             <div class="top-section-box" th:with="base_info = ${theme.config?.base_info}">
               <div class="top-section-left">
-                <div class="display_user" th:with="user = ${contributorFinder.getContributor(base_info?.display_user)}">
-                  <img th:src="@{${user.avatar}}" alt="">
+                <div class="display_user" th:with="user = ${contributorFinder.getContributor(base_info?.display_user)},
+                     displayName=${#strings.trim(user?.displayName)},
+                     letterName=${#strings.isEmpty(displayName) ? '' : displayName.replaceAll('^[^\p{L}\p{N}]+', '')},
+                     initial=${#strings.isEmpty(letterName) ? '#' : #strings.substring(letterName, 0, 1)},
+                     hasAvatar=${!#strings.isEmpty(user?.avatar)}"
+                     th:classappend="${hasAvatar} ? '' : 'no-avatar'">
+                  <img th:if="${hasAvatar}" th:src="@{${user?.avatar}}" th:alt="${displayName}"
+                       onerror="this.closest('.display_user').classList.add('no-avatar')">
+                  <div class="avatar-fallback" th:text="${initial}"></div>
                   <div>
-                    <div class="name" th:text="${user.displayName}"></div>
-                    <div class="bio" th:text="${user.bio}"></div>
+                    <div class="name" th:text="${user?.displayName}"></div>
+                    <div class="bio" th:text="${user?.bio}"></div>
                   </div>
                 </div>
            
 
               </div>
 
-              <div class="media-accounts" th:if="${#arrays.length(base_info.media_accounts)} > 0">
-                <div class="account" th:each="item : ${base_info?.media_accounts}"> 
-                  <a th:href="@{${item.url}}">
-                    <img th:if="${item.logo} != ''" th:src="@{${item.logo}}" alt="">
-                    <div th:if="${item.logo} == ''" th:text="${item?.name.substring(0, 1)}"></div>
+              <div class="media-accounts" th:if="${base_info != null and !#arrays.isEmpty(base_info.media_accounts)}">
+                <div class="account" th:each="item : ${base_info?.media_accounts}"
+                     th:with="hasLogo=${!#strings.isEmpty(item.logo)},
+                              displayName=${#strings.trim(item.name)},
+                              letterName=${#strings.isEmpty(displayName) ? '' : displayName.replaceAll('^[^\p{L}\p{N}]+', '')},
+                              initial=${#strings.isEmpty(letterName) ? '#' : #strings.substring(letterName, 0, 1)}"
+                     th:classappend="${hasLogo} ? '' : 'no-logo'">
+                  <a th:href="@{${item.url}}" th:title="${displayName}">
+                    <img th:if="${hasLogo}" th:src="@{${item.logo}}" th:alt="${displayName}"
+                         onerror="this.closest('.account').classList.add('no-logo')">
+                    <div class="account-fallback" th:text="${initial}"></div>
                   </a>
                 </div>
 
               </div>
               <div class="top-section-right">
-                <div class="running-time-box">站点已运行：<span class="running-time"></span></div>
+                <div class="running-time-box">站点已运行：<span class="running-time">0 天 00 小时 00 分钟 00 秒。</span></div>
                 <ul class="site-status" th:with="stats = ${siteStatsFinder.getStats()}">
                   <li >文章数量: <span th:text="${stats.post}"></span> </li>
                   <li>浏览量:<span  th:text="${ stats.visit}"></span> </li>
@@ -103,30 +116,74 @@
         sessionStorage.setItem('dateString',dateString)
         const date = sessionStorage.getItem('dateString')
 
+        const runningTimeElement = document.querySelector('.running-time');
+
         function timeBetweenDates(dateString) {
-          console.log(dateString)
           const givenDate = new Date(dateString);
           const currentDate = new Date();
-    
-          const timeDifference = currentDate - givenDate;
-    
+
+          const timeDifference = Math.max(0, currentDate - givenDate);
+
           const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
           const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    
+
           return {days, hours, minutes, seconds}
         }
-        
-        function updateTimeDifference() {
-          const timeDifference = timeBetweenDates(date);
-          const timeDifferenceString = `${timeDifference.days} 天 ${timeDifference.hours} 小时 ${timeDifference.minutes} 分钟 ${timeDifference.seconds} 秒。`;
-          const element = document.querySelector('.running-time');
-          element.innerText = timeDifferenceString;
+
+        // 用 0 补位，保证动画过程中数字宽度不跳动
+        function formatRunningTime({days, hours, minutes, seconds}, dayWidth) {
+          const pad = (value, length) => String(value).padStart(length, '0');
+          return `${pad(days, dayWidth)} 天 ${pad(hours, 2)} 小时 ${pad(minutes, 2)} 分钟 ${pad(seconds, 2)} 秒。`;
         }
-    
-        // 每秒更新一次时间差
-        setInterval(updateTimeDifference, 1000);
+
+        function initRunningTime() {
+          const givenDate = new Date(date);
+          if (!runningTimeElement || isNaN(givenDate.getTime())) {
+            return;
+          }
+
+          const target = timeBetweenDates(date);
+          const dayWidth = Math.max(1, String(target.days).length);
+
+          // 先用 0 占位，再进行数字累加动画
+          runningTimeElement.innerText = formatRunningTime({days: 0, hours: 0, minutes: 0, seconds: 0}, dayWidth);
+
+          const duration = 1500;
+          let startTime = null;
+          const easeOutCubic = progress => 1 - Math.pow(1 - progress, 3);
+
+          function animate(timestamp) {
+            if (startTime === null) {
+              startTime = timestamp;
+            }
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const eased = easeOutCubic(progress);
+
+            runningTimeElement.innerText = formatRunningTime({
+              days: Math.floor(target.days * eased),
+              hours: Math.floor(target.hours * eased),
+              minutes: Math.floor(target.minutes * eased),
+              seconds: Math.floor(target.seconds * eased)
+            }, dayWidth);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // 动画结束后切换为每秒实时走时
+              const updateTimeDifference = () => {
+                runningTimeElement.innerText = formatRunningTime(timeBetweenDates(date), dayWidth);
+              };
+              updateTimeDifference();
+              setInterval(updateTimeDifference, 1000);
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }
+
+        initRunningTime();
       </script>
   
     </div>
